@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015-2016, WSO2.Telco Inc. (http://www.wso2telco.com) 
+ * Copyright (c) 2015-2016, WSO2.Telco Inc. (http://www.wso2telco.com)
  *
  * All Rights Reserved. WSO2.Telco Inc. licences this file to you under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,7 +88,6 @@ public class MobileConnectConfig {
     private String adminPassword;
 
     private boolean isPcrServiceEnabled;
-
 
     public boolean isPcrServiceEnabled() {
         return isPcrServiceEnabled;
@@ -210,10 +209,61 @@ public class MobileConnectConfig {
     protected MSS mss;
 
     /**
-     * The headerenrich.
+     * The Discovery.
      */
-    @XmlElement(name = "HEADERENRICH")
-    protected HEADERENRICH headerenrich;
+    @XmlElement(name = "Discovery")
+    protected Discovery discovery;
+
+    /**
+     * Gets the discovery.
+     *
+     * @return the discovery
+     */
+    public Discovery getDiscovery() {
+        return discovery;
+    }
+
+    /**
+     * Sets the discovery.
+     *
+     * @param value the new discovery
+     */
+    public void setDiscovery(Discovery value) {
+        this.discovery = value;
+    }
+
+    /**
+     * The OAuthAdminServiceHeaders.
+     */
+    @XmlElement(name = "ServiceProviderHeaders")
+    protected OpenIDAdminServices openIDAdminServices;
+
+
+    public OpenIDAdminServices getOpenIDAdminServices() {
+        return openIDAdminServices;
+    }
+
+
+    public void setOpenIDAdminServices(OpenIDAdminServices value) {
+        this.openIDAdminServices= value;
+    }
+
+    /**
+     * The OAuthAdminServiceHeaders.
+     */
+    @XmlElement(name = "OpenIDAdminServices")
+    protected ServiceProviderHeaders serviceProviderHeaders;
+
+
+    public ServiceProviderHeaders getServiceProviderHeaders() {
+        return serviceProviderHeaders;
+    }
+
+
+    public void setServiceProviderHeaders(ServiceProviderHeaders value) {
+        this.serviceProviderHeaders= value;
+    }
+
 
     @XmlElement(name = "SessionUpdaterConfig")
     public SessionUpdaterConfig getSessionUpdaterConfig() {
@@ -237,6 +287,10 @@ public class MobileConnectConfig {
     public AuthenticatorSelectionConfig getAuthenticatorSelectionConfig() {
         return authenticatorSelectionConfig;
     }
+
+
+    @XmlElement(name = "HEADERENRICH")
+    protected HEADERENRICH headerenrich;
 
     public void setAuthenticatorSelectionConfig(AuthenticatorSelectionConfig authenticatorSelectionConfig) {
         this.authenticatorSelectionConfig = authenticatorSelectionConfig;
@@ -2413,4 +2467,89 @@ public class MobileConnectConfig {
             this.mobileNetworkOperatorBasedSelectionEnabled = mobileNetworkOperatorBasedSelectionEnabled;
         }
     }
+
+    /**
+     * The Class Discovery.
+     */
+    public static class Discovery {
+
+        private String authorizationHeader;
+        private String acceptHeader;
+
+
+        @XmlElement(name = "AuthorizationHeader")
+        public String getAuthorizationHeader() {
+            return authorizationHeader;
+        }
+
+        @XmlElement(name = "AccptHeader")
+        public String getAcceptHeader() {
+            return acceptHeader;
+        }
+
+        public void setAuthorizationHeader(String authorizationHeader) {
+            this.authorizationHeader = authorizationHeader;
+        }
+
+        public void setAcceptHeader(String acceptHeader) {
+            this.acceptHeader = acceptHeader;
+        }
+    }
+
+    /**
+     * The Class OpenIDAdminServices.
+     */
+    public static class OpenIDAdminServices {
+
+        private String userName;
+        private String password;
+
+
+        @XmlElement(name = "UserName")
+        public String getUserName() {
+            return userName;
+        }
+
+        @XmlElement(name = "Password")
+        public String getPassword() {
+            return password;
+        }
+
+        public void setUserName(String userName) {
+            this.userName = userName;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+    }
+
+    /**
+     * The Class ServiceProviderHeaders.
+     */
+    public static class ServiceProviderHeaders {
+
+        private String userName;
+        private String password;
+
+
+        @XmlElement(name = "UserName")
+        public String getUserName() {
+            return userName;
+        }
+
+        @XmlElement(name = "Password")
+        public String getPassword() {
+            return password;
+        }
+
+        public void setUserName(String userName) {
+            this.userName = userName;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+    }
+
 }
