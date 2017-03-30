@@ -42,7 +42,6 @@
         <module>components/sp-config-util</module>        
 		<module>features</module>
 		<module>components/sp-provisionservice</module>
-		<module>components/sp-provision-service</module>
   </modules>
 
 	<dependencyManagement>

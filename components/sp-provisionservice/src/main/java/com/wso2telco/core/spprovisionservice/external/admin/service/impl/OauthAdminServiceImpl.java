@@ -12,12 +12,30 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************/package com.wso2telco.core.spprovisionservice.external.admin.services;
+ ******************************************************************************/
+package com.wso2telco.core.spprovisionservice.external.admin.service.impl;
 
-public interface SpAppManagementService {
+import com.wso2telco.core.spprovisionservice.external.admin.service.OauthAdminService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-    void createSpApplication();
-    void updateSpApplication();
-    void getSpApplicationData();
-    void deleteSpApplication();
+public class OauthAdminServiceImpl implements OauthAdminService {
+
+    private static Log log = LogFactory.getLog(OauthAdminServiceImpl.class);
+
+    @Override
+    public boolean testMethod(String clientId) {
+        log.info("========== AouthAdminServiceImpl ========");
+        return false;
+    }
+
+    @Override
+    public void removeOAuthApplicationData() {
+
+    }
+
+    @Override
+    public void registerOAuthApplicationData() {
+
+    }
 }

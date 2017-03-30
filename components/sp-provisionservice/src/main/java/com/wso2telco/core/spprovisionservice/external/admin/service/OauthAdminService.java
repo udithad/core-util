@@ -13,18 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package com.wso2telco.core.spprovisionservice.admin.service.client;
+package com.wso2telco.core.spprovisionservice.external.admin.service;
 
-import com.wso2telco.core.spprovisionservice.external.admin.services.impl.OauthAdminServiceImpl;
-import com.wso2telco.core.spprovisionservice.external.admin.services.impl.SpAppManagementServiceImpl;
-import com.wso2telco.core.spprovisionservice.sp.entity.AdminServiceConfig;
-import com.wso2telco.core.spprovisionservice.sp.entity.AdminServiceDto;
+public interface OauthAdminService {
 
-public class OauthAdminServiceClient {
-
-    OauthAdminServiceImpl oauthAdminService;
-    private final String serviceName = "OAuthAdminService";
-    public SpAppManagementServiceImpl spAppManagementService;
-    public AdminServiceConfig adminServiceConfig;
-    public AdminServiceDto adminServiceDto;
+    public boolean testMethod(String clientId);
+    void removeOAuthApplicationData();
+    void registerOAuthApplicationData();
 }

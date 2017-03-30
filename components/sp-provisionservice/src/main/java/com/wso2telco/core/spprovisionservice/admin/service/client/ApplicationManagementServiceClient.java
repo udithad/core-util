@@ -13,29 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package com.wso2telco.core.spprovisionservice.external.admin.services.impl;
+package com.wso2telco.core.spprovisionservice.admin.service.client;
 
-import com.wso2telco.core.spprovisionservice.external.admin.services.SpAppManagementService;
+import com.wso2telco.core.spprovisionservice.external.admin.service.impl.SpAppManagementServiceImpl;
+import com.wso2telco.core.spprovisionservice.sp.entity.SpProvisionConfig;
+import com.wso2telco.core.spprovisionservice.sp.entity.SpProvisionDto;
 
-public class SpAppManagementServiceImpl implements SpAppManagementService {
+public class ApplicationManagementServiceClient {
 
-    @Override
-    public void createSpApplication() {
+    public SpAppManagementServiceImpl spAppManagementService;
+    public final String serviceName = "OAuthAdminService";
+    public SpProvisionConfig spProvisionConfig;
+    public SpProvisionDto spProvisionDto;
 
-    }
-
-    @Override
-    public void updateSpApplication() {
-
-    }
-
-    @Override
-    public void getSpApplicationData() {
-
-    }
-
-    @Override
-    public void deleteSpApplication() {
-
-    }
 }

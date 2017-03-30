@@ -12,12 +12,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************/
-package com.wso2telco.core.spprovisionservice.external.admin.services;
+ ******************************************************************************/package com.wso2telco.core.spprovisionservice.external.admin.service;
 
-public interface OauthAdminService {
+public interface SpAppManagementService {
 
-    public boolean testMethod(String clientId);
-    void removeOAuthApplicationData();
-    void registerOAuthApplicationData();
+    void createSpApplication();
+    void updateSpApplication();
+    void getSpApplicationData();
+    void deleteSpApplication();
 }

@@ -13,29 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package com.wso2telco.core.spprovisionservice.external.admin.services.impl;
+package com.wso2telco.core.spprovisionservice.admin.service.client;
 
-import com.wso2telco.core.spprovisionservice.external.admin.services.OauthAdminService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.wso2telco.core.spprovisionservice.external.admin.service.impl.OauthAdminServiceImpl;
+import com.wso2telco.core.spprovisionservice.external.admin.service.impl.SpAppManagementServiceImpl;
+import com.wso2telco.core.spprovisionservice.sp.entity.AdminServiceConfig;
+import com.wso2telco.core.spprovisionservice.sp.entity.AdminServiceDto;
 
-public class OauthAdminServiceImpl implements OauthAdminService {
+public class OauthAdminServiceClient {
 
-    private static Log log = LogFactory.getLog(OauthAdminServiceImpl.class);
-
-    @Override
-    public boolean testMethod(String clientId) {
-        log.info("========== AouthAdminServiceImpl ========");
-        return false;
-    }
-
-    @Override
-    public void removeOAuthApplicationData() {
-
-    }
-
-    @Override
-    public void registerOAuthApplicationData() {
-
-    }
+    OauthAdminServiceImpl oauthAdminService;
+    private final String serviceName = "OAuthAdminService";
+    public SpAppManagementServiceImpl spAppManagementService;
+    public AdminServiceConfig adminServiceConfig;
+    public AdminServiceDto adminServiceDto;
 }
