@@ -617,7 +617,7 @@ public class MobileConnectConfig {
             this.welcomeMessageDisabled = welcomeMessageDisabled;
         }
 
-        @XmlElementWrapper(name="OperatorWelcomeMessage")
+        @XmlElementWrapper(name = "OperatorWelcomeMessage")
         @XmlElement(name = "Operator")
         public List<OperatorSmsConfig> getOperatorSmsConfigs() {
             return operatorSmsConfigs;
@@ -626,6 +626,7 @@ public class MobileConnectConfig {
         public void setOperatorSmsConfigs(List<OperatorSmsConfig> operatorSmsConfigs) {
             this.operatorSmsConfigs = operatorSmsConfigs;
         }
+
         /**
          * The sms login message
          */
@@ -642,7 +643,6 @@ public class MobileConnectConfig {
         private OperatorSpecificMessages operatorSpecificMessages;
 
         /**
-         *
          * @return
          */
         @XmlElement(name = "RegistrationMessage")
@@ -652,6 +652,7 @@ public class MobileConnectConfig {
 
         /**
          * Gets SMS login message
+         *
          * @return the generic login message
          */
         @XmlElement(name = "LoginMessage")
@@ -661,6 +662,7 @@ public class MobileConnectConfig {
 
         /**
          * The Operator Specific SMS Messages
+         *
          * @return the operator specific messages object
          */
         @XmlElement(name = "OperatorSpecificMessages")
@@ -875,6 +877,7 @@ public class MobileConnectConfig {
 
         /**
          * Sets the SMS login message
+         *
          * @param loginMessage the login message
          */
         public void setLoginMessage(String loginMessage) {
@@ -883,6 +886,7 @@ public class MobileConnectConfig {
 
         /**
          * Sets the SMS registration message
+         *
          * @param registrationMessage the registration message
          */
         public void setRegistrationMessage(String registrationMessage) {
@@ -891,6 +895,7 @@ public class MobileConnectConfig {
 
         /**
          * Sets the operator specific messages
+         *
          * @param operatorSpecificMessages The operator specific messages
          */
         public void setOperatorSpecificMessages(OperatorSpecificMessages operatorSpecificMessages) {
@@ -2411,4 +2416,109 @@ public class MobileConnectConfig {
         }
     }
 
+    private Discovery discovery;
+
+    public void setDiscovery(Discovery discovery) {
+        this.discovery = discovery;
+    }
+
+    @XmlElement(name = "Discovery")
+    public Discovery getDiscovery() {
+        return discovery;
+    }
+
+    public static class Discovery {
+
+        private String authorizationHeader;
+        private String acceptHeader;
+
+
+        @XmlElement(name = "AuthorizationHeader")
+        public String getAuthorizationHeader() {
+            return authorizationHeader;
+        }
+
+        @XmlElement(name = "AccptHeader")
+        public String getAcceptHeader() {
+            return acceptHeader;
+        }
+
+        public void setAuthorizationHeader(String authorizationHeader) {
+            this.authorizationHeader = authorizationHeader;
+        }
+
+        public void setAcceptHeader(String acceptHeader) {
+            this.acceptHeader = acceptHeader;
+        }
+    }
+
+
+    private OpenAdminService openAdminService;
+
+    public void setOpenAdminService(OpenAdminService openAdminService) {
+        this.openAdminService = openAdminService;
+    }
+
+    @XmlElement(name = "OpenIDAdminServices")
+    public OpenAdminService getOpenAdminService() {
+        return openAdminService;
+    }
+
+    public static class OpenAdminService {
+        private String userName;
+        private String password;
+
+        @XmlElement(name = "UserName")
+        public String getUserName() {
+            return userName;
+        }
+
+        public void setUserName(String userName) {
+            this.userName = userName;
+        }
+
+        @XmlElement(name = "Password")
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+    }
+
+    private ServiceProvider serviceProvider;
+
+    public void setServiceProvider(ServiceProvider serviceProvider) {
+        this.serviceProvider = serviceProvider;
+    }
+
+    @XmlElement(name = "ServiceProviderHeaders")
+    public ServiceProvider getServiceProvider() {
+        return serviceProvider;
+    }
+
+    public static class ServiceProvider {
+        private String username;
+        private String password;
+
+        @XmlElement(name = "UserName")
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        @XmlElement(name = "Password")
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+    }
 }
