@@ -17,31 +17,41 @@ package com.wso2telco.core.spprovisionservice.sp.entity;
 
 public class DiscoveryServiceDto {
 
-    protected String Authorization;
-    protected String Accept;
-    protected String RedirectUrl;
+    private String clientId;
+    private String clientSecret;
+    private String msisdn;
+    private String sectorId;
 
-    public String getAuthorization() {
-        return Authorization;
+    public String getClientId() {
+        return clientId;
     }
 
-    public void setAuthorization(String authorization) {
-        Authorization = authorization;
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
-    public String getAccept() {
-        return Accept;
+    public String getClientSecret() {
+        return clientSecret;
     }
 
-    public void setAccept(String accept) {
-        Accept = accept;
+    public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
     }
 
-    public String getRedirectUrl() {
-        return RedirectUrl;
+    public String getMsisdn() {
+        return msisdn;
     }
 
-    public void setRedirectUrl(String redirectUrl) {
-        RedirectUrl = redirectUrl;
+    public void setMsisdn(String msisdn) {
+        this.msisdn = msisdn;
     }
+
+    public String getSectorId() {
+        return sectorId;
+    }
+
+    public void setSectorId(String sectorId) {
+        this.sectorId = sectorId;
+    }
+
 }

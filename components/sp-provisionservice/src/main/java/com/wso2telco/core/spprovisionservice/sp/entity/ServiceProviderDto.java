@@ -33,6 +33,8 @@ public class ServiceProviderDto {
     private String provisioningUserStore;
     private String idpRoles;
     private boolean saasApp;
+    private AdminServiceDto adminServiceDto;
+    private ProvisionType existance;
 
     public String getApplicationName() {
         return applicationName;
@@ -160,6 +162,22 @@ public class ServiceProviderDto {
 
     public void setSaasApp(boolean saasApp) {
         this.saasApp = saasApp;
+    }
+
+    public AdminServiceDto getAdminServiceDto() {
+        return adminServiceDto;
+    }
+
+    public void setAdminServiceDto(AdminServiceDto adminServiceDto) {
+        this.adminServiceDto = adminServiceDto;
+    }
+
+    public ProvisionType getExistance() {
+        return existance;
+    }
+
+    public void setExistance(ProvisionType existance) {
+        this.existance = existance;
     }
 
 }

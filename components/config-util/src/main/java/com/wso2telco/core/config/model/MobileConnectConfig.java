@@ -231,14 +231,12 @@ public class MobileConnectConfig {
         return authenticatorSelectionConfig;
     }
 
-
     @XmlElement(name = "HEADERENRICH")
     protected HEADERENRICH headerenrich;
 
     public void setAuthenticatorSelectionConfig(AuthenticatorSelectionConfig authenticatorSelectionConfig) {
         this.authenticatorSelectionConfig = authenticatorSelectionConfig;
     }
-
 
     /**
      * Gets the data source name.
@@ -429,7 +427,6 @@ public class MobileConnectConfig {
     public void setMSS(MSS mss) {
         this.mss = mss;
     }
-
 
     /**
      * The Class GSMAExchangeConfig.
@@ -835,7 +832,6 @@ public class MobileConnectConfig {
             return accessToken;
         }
 
-
         /**
          * Returns the auth url for sms
          *
@@ -860,7 +856,6 @@ public class MobileConnectConfig {
          *
          * @param senderAddress sender address
          */
-
 
         public void setSenderAddress(String senderAddress) {
             this.senderAddress = senderAddress;
@@ -1769,7 +1764,6 @@ public class MobileConnectConfig {
 
     }
 
-
     private DataPublisher dataPublisher;
 
     public void setDataPublisher(DataPublisher dataPublisher) {
@@ -1879,7 +1873,6 @@ public class MobileConnectConfig {
             this.mobileIPRanges = mobileIPRanges;
         }
 
-
         /**
          * Gets the operator name.
          *
@@ -1917,7 +1910,6 @@ public class MobileConnectConfig {
         public void setIpValidation(String ipValidation) {
             this.ipValidation = ipValidation;
         }
-
 
     }
 
@@ -2029,7 +2021,6 @@ public class MobileConnectConfig {
         public void setMssPinTest(String mssPinTest) {
             this.mssPinTest = mssPinTest;
         }
-
 
         /**
          * Gets the endpoint.
@@ -2416,42 +2407,91 @@ public class MobileConnectConfig {
         }
     }
 
-    private Discovery discovery;
+    private DiscoveryConfig discoveryConfig;
 
-    public void setDiscovery(Discovery discovery) {
-        this.discovery = discovery;
+    @XmlElement(name = "DiscoveryConfigs")
+    public DiscoveryConfig getDiscoveryConfig() {
+        return discoveryConfig;
     }
 
-    @XmlElement(name = "Discovery")
-    public Discovery getDiscovery() {
-        return discovery;
+    public void setDiscoveryConfig(DiscoveryConfig discoveryConfig) {
+        this.discoveryConfig = discoveryConfig;
     }
 
-    public static class Discovery {
+    public static class DiscoveryConfig {
 
-        private String authorizationHeader;
-        private String acceptHeader;
+        private EksDiscoveryConfig eksDiscoveryConfig;
+        private CrValidateDiscoveryConfig crValidateDiscoveryConfig;
 
-
-        @XmlElement(name = "AuthorizationHeader")
-        public String getAuthorizationHeader() {
-            return authorizationHeader;
+        @XmlElement(name = "DiscoveryCrConfig")
+        public CrValidateDiscoveryConfig getCrValidateDiscoveryConfig() {
+            return crValidateDiscoveryConfig;
         }
 
-        @XmlElement(name = "AccptHeader")
-        public String getAcceptHeader() {
-            return acceptHeader;
+        public void setCrValidateDiscoveryConfig(CrValidateDiscoveryConfig crValidateDiscoveryConfig) {
+            this.crValidateDiscoveryConfig = crValidateDiscoveryConfig;
         }
 
-        public void setAuthorizationHeader(String authorizationHeader) {
-            this.authorizationHeader = authorizationHeader;
+        @XmlElement(name = "DiscoveryEksConfig")
+        public EksDiscoveryConfig getEksDiscoveryConfig() {
+            return eksDiscoveryConfig;
         }
 
-        public void setAcceptHeader(String acceptHeader) {
-            this.acceptHeader = acceptHeader;
+        public void setEksDiscoveryConfig(EksDiscoveryConfig eksDiscoveryConfig) {
+            this.eksDiscoveryConfig = eksDiscoveryConfig;
         }
+
     }
 
+    public static class EksDiscoveryConfig {
+
+        private String serviceUrl;
+        private String redirectUrl;
+        private String msisdn;
+
+        @XmlElement(name = "EksRedirectUrl")
+        public String getRedirectUrl() {
+            return redirectUrl;
+        }
+
+        public void setRedirectUrl(String redirectUrl) {
+            this.redirectUrl = redirectUrl;
+        }
+
+        @XmlElement(name = "EksServiceUrl")
+        public String getServiceUrl() {
+            return serviceUrl;
+        }
+
+        public void setServiceUrl(String serviceUrl) {
+            this.serviceUrl = serviceUrl;
+        }
+
+        @XmlElement(name = "Msisdn")
+        public String getMsisdn() {
+            return msisdn;
+        }
+
+        public void setMsisdn(String msisdn) {
+            this.msisdn = msisdn;
+        }
+
+    }
+
+    public static class CrValidateDiscoveryConfig {
+
+        private String serviceUrl;
+
+        @XmlElement(name = "CrdServiceUrl")
+        public String getServiceUrl() {
+            return serviceUrl;
+        }
+
+        public void setServiceUrl(String serviceUrl) {
+            this.serviceUrl = serviceUrl;
+        }
+
+    }
 
     private OpenAdminService openAdminService;
 

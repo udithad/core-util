@@ -17,45 +17,41 @@ package com.wso2telco.core.spprovisionservice.sp.entity;
 
 public class DiscoveryServiceConfig {
 
-    private String authorizationHeader;
-    private String authorizationHeaderValue;
-    private String acceptHeader;
-    private String acceptHeadreValue ;
+    private EksDisConfig eksDiscoveryConfig;
+    private CrValidateDiscoveryConfig crValidateDiscoveryConfig;
+    private boolean isPcrServiceEnabled = false;
+    private boolean isDiscoverOnlyLocal = false;
 
-    public String getAuthorizationHeader() {
-        return authorizationHeader;
+    public EksDisConfig getEksDiscoveryConfig() {
+        return eksDiscoveryConfig;
     }
 
-    public void setAuthorizationHeader(String authorizationHeader) {
-        this.authorizationHeader = authorizationHeader;
+    public void setEksDiscoveryConfig(EksDisConfig eksDiscoveryConfig) {
+        this.eksDiscoveryConfig = eksDiscoveryConfig;
     }
 
-    public String getAuthorizationHeaderValue() {
-        return authorizationHeaderValue;
+    public CrValidateDiscoveryConfig getCrValidateDiscoveryConfig() {
+        return crValidateDiscoveryConfig;
     }
 
-    public void setAuthorizationHeaderValue(String authorizationHeaderValue) {
-        this.authorizationHeaderValue = authorizationHeaderValue;
+    public void setCrValidateDiscoveryConfig(CrValidateDiscoveryConfig crValidateDiscoveryConfig) {
+        this.crValidateDiscoveryConfig = crValidateDiscoveryConfig;
     }
 
-    public String getAcceptHeader() {
-        return acceptHeader;
+    public boolean isPcrServiceEnabled() {
+        return isPcrServiceEnabled;
     }
 
-    public void setAcceptHeader(String acceptHeader) {
-        this.acceptHeader = acceptHeader;
+    public void setPcrServiceEnabled(boolean isPcrServiceEnabled) {
+        this.isPcrServiceEnabled = isPcrServiceEnabled;
     }
 
-    public String getAcceptHeadreValue() {
-        return acceptHeadreValue;
+    public boolean isDiscoverOnlyLocal() {
+        return isDiscoverOnlyLocal;
     }
 
-    public void setAcceptHeadreValue(String acceptHeadreValue) {
-        this.acceptHeadreValue = acceptHeadreValue;
+    public void setDiscoverOnlyLocal(boolean isDiscoverOnlyLocal) {
+        this.isDiscoverOnlyLocal = isDiscoverOnlyLocal;
     }
 
-
-    public void findServiceProvider(String clientId){
-
-    }
 }
