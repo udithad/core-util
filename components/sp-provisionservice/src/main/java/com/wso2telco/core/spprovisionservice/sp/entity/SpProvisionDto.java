@@ -17,9 +17,31 @@ package com.wso2telco.core.spprovisionservice.sp.entity;
 
 public class SpProvisionDto {
 
-    public ServiceProviderDto serviceProviderDto = new ServiceProviderDto();
-    public ServiceProviderConfig serviceProviderConfig = new ServiceProviderConfig();
-    public ProvisionType provisionType = ProvisionType.LOCAL ;
+    private ServiceProviderDto serviceProviderDto = null;
+    private SpProvisionConfig spProvisionConfig = null;
+    private ProvisionType provisionType = null;
 
+    public ServiceProviderDto getServiceProviderDto() {
+        return serviceProviderDto;
+    }
 
+    public void setServiceProviderDto(ServiceProviderDto serviceProviderDto) {
+        this.serviceProviderDto = serviceProviderDto;
+    }
+
+    public SpProvisionConfig getSpProvisionConfig() {
+        return spProvisionConfig;
+    }
+
+    public void setSpProvisionConfig(SpProvisionConfig spProvisionConfig) {
+        this.spProvisionConfig = spProvisionConfig;
+    }
+
+    public ProvisionType getProvisionType() {
+        return provisionType;
+    }
+
+    public void setProvisionType(ProvisionType provisionType) {
+        this.provisionType = provisionType;
+    }
 }

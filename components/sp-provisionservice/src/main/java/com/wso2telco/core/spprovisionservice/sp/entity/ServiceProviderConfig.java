@@ -17,8 +17,8 @@ package com.wso2telco.core.spprovisionservice.sp.entity;
 
 public class ServiceProviderConfig {
 
-    private String userName;
-    private String password;
+    private String userName = null;
+    private String password = null;
 
     public String getUserName() {
         return userName;
@@ -35,6 +35,5 @@ public class ServiceProviderConfig {
     public void setPassword(String password) {
         this.password = password;
     }
-
 
 }

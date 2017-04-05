@@ -15,97 +15,67 @@
  ******************************************************************************/
 package com.wso2telco.core.spprovisionservice.admin.service.client;
 
+import com.wso2telco.core.spprovisionservice.admin.config.AdministrationServiceConfig;
 import com.wso2telco.core.spprovisionservice.external.admin.service.dataTransform.TransformServiceProviderDto;
 import com.wso2telco.core.spprovisionservice.sp.entity.ServiceProviderDto;
 import com.wso2telco.core.spprovisionservice.sp.exception.SpProvisionServiceException;
-import org.apache.axis2.context.ServiceContext;
-import org.apache.axis2.transport.http.HTTPConstants;
-import org.apache.commons.pool.impl.GenericObjectPool;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.axis2.AxisFault;
+import org.apache.axis2.client.Options;
+import org.apache.axis2.client.ServiceClient;
+import org.apache.axis2.transport.http.HttpTransportProperties;
 import org.wso2.carbon.identity.application.common.model.xsd.ServiceProvider;
 import org.wso2.carbon.identity.application.mgt.stub.IdentityApplicationManagementServiceIdentityApplicationManagementException;
 import org.wso2.carbon.identity.application.mgt.stub.IdentityApplicationManagementServiceStub;
 
 import java.rmi.RemoteException;
 
-public class ApplicationManagementServiceClient {
+public class ApplicationManagementClient {
 
-    private static final Logger log = LoggerFactory.getLogger(ApplicationManagementServiceClient.class);
-    private static String cookie;
-    private GenericObjectPool stubs;
-    private static boolean DEBUG = log.isDebugEnabled();
+    private IdentityApplicationManagementServiceStub stub = null;
+    private ServiceClient client = null;
     private TransformServiceProviderDto transformServiceProviderDto = null;
-    private IdentityApplicationManagementServiceStub identityApplicationManagementServiceStub;
 
-    public ApplicationManagementServiceClient() {
-        stubs = new GenericObjectPool(new ApplicationManagementServiceClientStubFactory());
-        generateAndAuthenticateStub();
+
+    public ApplicationManagementClient() {
+        createAndAuthenticateStub();
     }
 
-    public void generateAndAuthenticateStub() {
+    private void createAndAuthenticateStub() {
+        AdministrationServiceConfig config = new AdministrationServiceConfig();
 
-        Object stub = null;
         try {
-            stub = this.stubs.borrowObject();
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
-        if (stub != null) {
-            identityApplicationManagementServiceStub = (IdentityApplicationManagementServiceStub) stub;
+            stub = new IdentityApplicationManagementServiceStub(null,
+                    config.getApplicationManagementHostUrl());
 
-            if (cookie != null) {
-                identityApplicationManagementServiceStub._getServiceClient().getOptions().setProperty(HTTPConstants.COOKIE_STRING,
-                        cookie);
-            }
-
-            ServiceContext serviceContext = identityApplicationManagementServiceStub._getServiceClient()
-                    .getLastOperationContext().getServiceContext();
-            cookie = (String) serviceContext.getProperty(HTTPConstants.COOKIE_STRING);
+            client = stub._getServiceClient();
+        } catch (AxisFault axisFault) {
+            axisFault.printStackTrace();
         }
     }
 
-    /*
-    * Get Application Data
-    * */
     public ServiceProvider getSpApplicationData(String applicationName) throws SpProvisionServiceException {
 
-        ServiceProvider serviceProvider = null;
+        ServiceProvider serviceProvider;
+        authenticate(client);
         try {
-            serviceProvider = identityApplicationManagementServiceStub.getApplication(applicationName);
+            serviceProvider = stub.getApplication(applicationName);
         } catch (RemoteException e) {
             throw new SpProvisionServiceException(e.getMessage());
         } catch (IdentityApplicationManagementServiceIdentityApplicationManagementException e) {
+            throw new SpProvisionServiceException(e.getMessage());
+        } catch (Exception e) {
             throw new SpProvisionServiceException(e.getMessage());
         }
         return serviceProvider;
     }
 
-    /*
-    * Create Service Provider
-    * */
     public void createSpApplication(ServiceProviderDto serviceProviderDto) throws SpProvisionServiceException {
 
+        authenticate(client);
         transformServiceProviderDto = new TransformServiceProviderDto();
-        ServiceProvider application = transformServiceProviderDto.transformToServiceProviderToCreateApplication(serviceProviderDto);
+        ServiceProvider serviceProvider = transformServiceProviderDto.transformToServiceProviderToCreateApplication(serviceProviderDto);
         try {
-            identityApplicationManagementServiceStub.createApplication(application);
-        } catch (RemoteException e) {
-            throw new SpProvisionServiceException(e.getMessage());
-        } catch (IdentityApplicationManagementServiceIdentityApplicationManagementException e) {
-            throw new SpProvisionServiceException(e.getMessage());
-        }
-    }
-
-    /*
-    * Update Service Provider Application
-    * */
-    public void updateSpApplication(ServiceProviderDto serviceProviderDto) throws SpProvisionServiceException {
-
-        transformServiceProviderDto = new TransformServiceProviderDto();
-        ServiceProvider application = transformServiceProviderDto.transformToServiceProviderToUpdateApplication(serviceProviderDto);
-        try {
-            identityApplicationManagementServiceStub.updateApplication(application);
+            stub.createApplication(serviceProvider);
         } catch (RemoteException e) {
             throw new SpProvisionServiceException(e.getMessage());
         } catch (IdentityApplicationManagementServiceIdentityApplicationManagementException e) {
@@ -115,18 +85,44 @@ public class ApplicationManagementServiceClient {
         }
     }
 
-    /*
-    * Delete Service Provider deleteApplication(String applicationName71)
-    * */
-    public void deleteSpApplication(String applicationName) throws SpProvisionServiceException {
+    public void updateSpApplication(ServiceProviderDto serviceProviderDto) throws SpProvisionServiceException {
 
+        authenticate(client);
+        transformServiceProviderDto = new TransformServiceProviderDto();
+        ServiceProvider serviceProvider = transformServiceProviderDto.transformToServiceProviderToUpdateApplication(serviceProviderDto);
         try {
-            identityApplicationManagementServiceStub.deleteApplication(applicationName);
+            stub.updateApplication(serviceProvider);
         } catch (RemoteException e) {
             throw new SpProvisionServiceException(e.getMessage());
         } catch (IdentityApplicationManagementServiceIdentityApplicationManagementException e) {
             throw new SpProvisionServiceException(e.getMessage());
+        } catch (Exception e) {
+            throw new SpProvisionServiceException(e.getMessage());
         }
     }
-}
 
+    public void deleteSpApplication(String applicationName) throws SpProvisionServiceException {
+
+        authenticate(client);
+        try {
+            stub.deleteApplication(applicationName);
+        } catch (RemoteException e) {
+            throw new SpProvisionServiceException(e.getMessage());
+        } catch (IdentityApplicationManagementServiceIdentityApplicationManagementException e) {
+            throw new SpProvisionServiceException(e.getMessage());
+        } catch (Exception e) {
+            throw new SpProvisionServiceException(e.getMessage());
+        }
+    }
+
+    public static void authenticate(ServiceClient client) {
+        Options option = client.getOptions();
+        HttpTransportProperties.Authenticator auth = new HttpTransportProperties.Authenticator();
+        auth.setUsername("admin");
+        auth.setPassword("admin");
+        auth.setPreemptiveAuthentication(true);
+        option.setProperty(org.apache.axis2.transport.http.HTTPConstants.AUTHENTICATE, auth);
+        option.setManageSession(true);
+    }
+
+}

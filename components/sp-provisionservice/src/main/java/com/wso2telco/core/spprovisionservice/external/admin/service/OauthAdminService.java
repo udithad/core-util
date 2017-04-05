@@ -15,9 +15,12 @@
  ******************************************************************************/
 package com.wso2telco.core.spprovisionservice.external.admin.service;
 
+import com.wso2telco.core.spprovisionservice.sp.entity.AdminServiceDto;
+import com.wso2telco.core.spprovisionservice.sp.exception.SpProvisionServiceException;
+
 public interface OauthAdminService {
 
-    public boolean testMethod(String clientId);
-    void removeOAuthApplicationData();
-    void registerOAuthApplicationData();
+    void removeOAuthApplicationData(String consumerKey) throws SpProvisionServiceException;
+
+    void registerOAuthApplicationData(AdminServiceDto adminServiceDto) throws SpProvisionServiceException;
 }

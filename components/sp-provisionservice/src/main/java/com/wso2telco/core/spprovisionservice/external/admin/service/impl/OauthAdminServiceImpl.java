@@ -15,27 +15,49 @@
  ******************************************************************************/
 package com.wso2telco.core.spprovisionservice.external.admin.service.impl;
 
+import com.wso2telco.core.spprovisionservice.admin.service.client.OauthAdminClient;
 import com.wso2telco.core.spprovisionservice.external.admin.service.OauthAdminService;
+import com.wso2telco.core.spprovisionservice.sp.entity.AdminServiceDto;
+import com.wso2telco.core.spprovisionservice.sp.exception.SpProvisionServiceException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.identity.oauth.stub.dto.OAuthConsumerAppDTO;
 
 public class OauthAdminServiceImpl implements OauthAdminService {
 
     private static Log log = LogFactory.getLog(OauthAdminServiceImpl.class);
+    private OauthAdminClient oauthAdminServiceClient = null;
+    private OAuthConsumerAppDTO oAuthConsumerAppDTO = null;
 
     @Override
-    public boolean testMethod(String clientId) {
-        log.info("========== AouthAdminServiceImpl ========");
-        return false;
+    public void removeOAuthApplicationData(String consumerKey) throws SpProvisionServiceException {
+
+        oauthAdminServiceClient = new OauthAdminClient();
+        try {
+            oauthAdminServiceClient.removeOauthApplicationData(consumerKey);
+        } catch (SpProvisionServiceException e) {
+            log.error("Error occurred in remove Oauth Application " + e.getMessage());
+            throw new SpProvisionServiceException(e.getMessage());
+        }
     }
 
     @Override
-    public void removeOAuthApplicationData() {
+    public void registerOAuthApplicationData(AdminServiceDto adminServiceDto) throws SpProvisionServiceException {
 
+        oauthAdminServiceClient = new OauthAdminClient();
+        try {
+            oAuthConsumerAppDTO = oauthAdminServiceClient.getOauthApplicationDataByAppName(adminServiceDto.getApplicationName());
+            if (oAuthConsumerAppDTO != null) {
+                if (!(oAuthConsumerAppDTO.getOauthConsumerKey().equals(adminServiceDto.getOauthConsumerKey())) || !(oAuthConsumerAppDTO.getOauthConsumerSecret().equals(adminServiceDto.getOauthConsumerSecret()))) {
+                    removeOAuthApplicationData(oAuthConsumerAppDTO.getOauthConsumerKey());
+                    registerOAuthApplicationData(adminServiceDto);
+                }
+            } else {
+                oauthAdminServiceClient.registerOauthApplicationData(adminServiceDto);
+            }
+        } catch (SpProvisionServiceException e) {
+            throw new SpProvisionServiceException(e.getMessage());
+        }
     }
 
-    @Override
-    public void registerOAuthApplicationData() {
-
-    }
 }

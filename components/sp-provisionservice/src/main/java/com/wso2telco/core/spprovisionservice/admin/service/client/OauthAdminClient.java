@@ -15,13 +15,14 @@
  ******************************************************************************/
 package com.wso2telco.core.spprovisionservice.admin.service.client;
 
+import com.wso2telco.core.spprovisionservice.admin.config.AdministrationServiceConfig;
 import com.wso2telco.core.spprovisionservice.external.admin.service.dataTransform.TransformAdminServiceDto;
 import com.wso2telco.core.spprovisionservice.sp.entity.AdminServiceDto;
 import com.wso2telco.core.spprovisionservice.sp.exception.SpProvisionServiceException;
 import org.apache.axis2.AxisFault;
-import org.apache.axis2.context.ServiceContext;
-import org.apache.axis2.transport.http.HTTPConstants;
-import org.apache.commons.pool.impl.GenericObjectPool;
+import org.apache.axis2.client.Options;
+import org.apache.axis2.client.ServiceClient;
+import org.apache.axis2.transport.http.HttpTransportProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wso2.carbon.identity.oauth.stub.OAuthAdminServiceException;
@@ -30,42 +31,28 @@ import org.wso2.carbon.identity.oauth.stub.dto.OAuthConsumerAppDTO;
 
 import java.rmi.RemoteException;
 
+public class OauthAdminClient {
 
-public class OauthAdminServiceClient {
-    private static final Logger log = LoggerFactory.getLogger(OauthAdminServiceClient.class);
-    private static String cookie;
-    private GenericObjectPool stubs;
-    private static boolean DEBUG = log.isDebugEnabled();
+    private AdministrationServiceConfig config;
+    private static final Logger log = LoggerFactory.getLogger(OauthAdminClient.class);
     private TransformAdminServiceDto transformAdminServiceDto = null;
-    private OauthAdminServiceClientStubFactory oauthAdminServiceClientStubFactory = null;
     private OAuthAdminServiceStub oAuthAdminServiceStub = null;
+    private ServiceClient client = null;
 
-    public OauthAdminServiceClient() throws SpProvisionServiceException {
-        stubs = new GenericObjectPool(new OauthAdminServiceClientStubFactory());
-        generateAndAuthenticateStub();
+
+    public OauthAdminClient() {
+        createAndAuthenticateStub();
     }
 
-    public void generateAndAuthenticateStub() {
-        Object stub = null;
+    public void createAndAuthenticateStub() {
+        config = new AdministrationServiceConfig();
         try {
-            stub = this.stubs.borrowObject();
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
-        if (stub != null) {
-            try {
-                oAuthAdminServiceStub = new OAuthAdminServiceStub();
-            } catch (AxisFault axisFault) {
-                axisFault.printStackTrace();
-            }
+            oAuthAdminServiceStub = new OAuthAdminServiceStub(null,
+                    config.getAdminServicesHostUrl());
 
-            if (cookie != null) {
-                oAuthAdminServiceStub._getServiceClient().getOptions().setProperty(HTTPConstants.COOKIE_STRING,
-                        cookie);
-            }
-            ServiceContext serviceContext = oAuthAdminServiceStub._getServiceClient()
-                    .getLastOperationContext().getServiceContext();
-            cookie = (String) serviceContext.getProperty(HTTPConstants.COOKIE_STRING);
+            client = oAuthAdminServiceStub._getServiceClient();
+        } catch (AxisFault axisFault) {
+            axisFault.printStackTrace();
         }
     }
 
@@ -75,6 +62,8 @@ public class OauthAdminServiceClient {
     public OAuthConsumerAppDTO getOauthApplicationDataByAppName(String appName) throws SpProvisionServiceException {
 
         OAuthConsumerAppDTO apps;
+        authenticate(client);
+
         try {
             apps = oAuthAdminServiceStub.getOAuthApplicationDataByAppName(appName);
         } catch (RemoteException e) {
@@ -88,12 +77,13 @@ public class OauthAdminServiceClient {
     }
 
     /*
-    * Register OAuthApplication Data
-    * */
+   * Register OAuthApplication Data
+   * */
     public void registerOauthApplicationData(AdminServiceDto adminServiceDto) throws SpProvisionServiceException {
 
         transformAdminServiceDto = new TransformAdminServiceDto();
         OAuthConsumerAppDTO app = transformAdminServiceDto.transformToOAuthConsumerAppDto(adminServiceDto);
+        authenticate(client);
         try {
             oAuthAdminServiceStub.registerOAuthApplicationData(app);
         } catch (RemoteException e) {
@@ -108,6 +98,7 @@ public class OauthAdminServiceClient {
     * */
     public void removeOauthApplicationData(String consumerKey) throws SpProvisionServiceException {
 
+        authenticate(client);
         try {
             oAuthAdminServiceStub.removeOAuthApplicationData(consumerKey);
         } catch (RemoteException e) {
@@ -118,13 +109,14 @@ public class OauthAdminServiceClient {
     }
 
     /*
-    * Update OAuthConfigurations
-    * */
+   * Update OAuthConfigurations
+   * */
     public void updateOauthApplicationData(AdminServiceDto adminServiceDto) throws SpProvisionServiceException {
 
-        OAuthConsumerAppDTO oAuthConsumerAppDTO;
+        OAuthConsumerAppDTO oAuthConsumerAppDTO = null;
         TransformAdminServiceDto transformAdminServiceDto = new TransformAdminServiceDto();
         oAuthConsumerAppDTO = transformAdminServiceDto.transformToOAuthConsumerAppDto(adminServiceDto);
+        authenticate(client);
 
         try {
             oAuthAdminServiceStub.updateConsumerApplication(oAuthConsumerAppDTO);
@@ -133,5 +125,15 @@ public class OauthAdminServiceClient {
         } catch (OAuthAdminServiceException e) {
             throw new SpProvisionServiceException(e.getMessage());
         }
+    }
+
+    public static void authenticate(ServiceClient client) {
+        Options option = client.getOptions();
+        HttpTransportProperties.Authenticator auth = new HttpTransportProperties.Authenticator();
+        auth.setUsername("admin");
+        auth.setPassword("admin");
+        auth.setPreemptiveAuthentication(true);
+        option.setProperty(org.apache.axis2.transport.http.HTTPConstants.AUTHENTICATE, auth);
+        option.setManageSession(true);
     }
 }

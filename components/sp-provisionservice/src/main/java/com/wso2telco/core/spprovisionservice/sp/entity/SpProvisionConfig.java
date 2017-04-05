@@ -17,6 +17,22 @@ package com.wso2telco.core.spprovisionservice.sp.entity;
 
 public class SpProvisionConfig {
 
-    public AdminServiceConfig adminServiceConfig = new AdminServiceConfig();
-    public DiscoveryServiceConfig discoveryServiceConfig = new DiscoveryServiceConfig();
+    private AdminServiceDto adminServiceDto = null;
+    private DiscoveryServiceDto discoveryServiceDto = null;
+
+    public AdminServiceDto getAdminServiceDto() {
+        return adminServiceDto;
+    }
+
+    public void setAdminServiceDto(AdminServiceDto adminServiceDto) {
+        this.adminServiceDto = adminServiceDto;
+    }
+
+    public DiscoveryServiceDto getDiscoveryServiceDto() {
+        return discoveryServiceDto;
+    }
+
+    public void setDiscoveryServiceDto(DiscoveryServiceDto discoveryServiceDto) {
+        this.discoveryServiceDto = discoveryServiceDto;
+    }
 }

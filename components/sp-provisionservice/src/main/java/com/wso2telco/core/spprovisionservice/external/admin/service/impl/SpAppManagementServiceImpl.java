@@ -15,27 +15,70 @@
  ******************************************************************************/
 package com.wso2telco.core.spprovisionservice.external.admin.service.impl;
 
+import com.wso2telco.core.spprovisionservice.admin.service.client.ApplicationManagementClient;
 import com.wso2telco.core.spprovisionservice.external.admin.service.SpAppManagementService;
+import com.wso2telco.core.spprovisionservice.sp.entity.ServiceProviderDto;
+import com.wso2telco.core.spprovisionservice.sp.exception.SpProvisionServiceException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.identity.application.common.model.xsd.ServiceProvider;
 
 public class SpAppManagementServiceImpl implements SpAppManagementService {
 
-    @Override
-    public void createSpApplication() {
+    ApplicationManagementClient applicationManagementServiceClient = null;
+    private static Log log = LogFactory.getLog(SpAppManagementServiceImpl.class);
 
+    public SpAppManagementServiceImpl() {
+        applicationManagementServiceClient = new ApplicationManagementClient();
     }
 
     @Override
-    public void updateSpApplication() {
+    public void createSpApplication(ServiceProviderDto serviceProviderDto) throws SpProvisionServiceException {
 
+        try {
+            applicationManagementServiceClient.createSpApplication(serviceProviderDto);
+        } catch (SpProvisionServiceException e) {
+            log.error("Error occurred in remove create Service Provider Application " + e.getMessage());
+            throw new SpProvisionServiceException(e.getMessage());
+        }
     }
 
     @Override
-    public void getSpApplicationData() {
+    public void updateSpApplication(ServiceProviderDto serviceProviderDto) throws SpProvisionServiceException {
 
+        try {
+            ServiceProvider serviceProvider = applicationManagementServiceClient.getSpApplicationData(serviceProviderDto.getApplicationName());
+            serviceProviderDto.setApplicationId(serviceProvider.getApplicationID());
+            applicationManagementServiceClient.updateSpApplication(serviceProviderDto);
+        } catch (SpProvisionServiceException e) {
+            log.error("Error occurred in update Service Provider Application " + e.getMessage());
+            throw new SpProvisionServiceException(e.getMessage());
+        }
     }
 
     @Override
-    public void deleteSpApplication() {
+    public ServiceProvider getSpApplicationData(String applicationName) throws SpProvisionServiceException {
 
+        ServiceProvider serviceProvider;
+
+        try {
+            serviceProvider = applicationManagementServiceClient.getSpApplicationData(applicationName);
+        } catch (SpProvisionServiceException e) {
+            log.error("Error occurred in getting application data" + e.getMessage());
+            throw new SpProvisionServiceException(e.getMessage());
+        }
+        return serviceProvider;
     }
+
+    @Override
+    public void deleteSpApplication(String applicationName) throws SpProvisionServiceException {
+
+        try {
+            applicationManagementServiceClient.deleteSpApplication(applicationName);
+        } catch (SpProvisionServiceException e) {
+            log.error("Error occurred in deleting application data" + e.getMessage());
+            throw new SpProvisionServiceException(e.getMessage());
+        }
+    }
+
 }

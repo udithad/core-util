@@ -16,4 +16,14 @@
 package com.wso2telco.core.spprovisionservice.sp.exception;
 
 public class SpProvisionServiceException extends Exception {
+
+    private static final long serialVersionUID = 1L;
+
+    public SpProvisionServiceException(String message) {
+        super(message);
+    }
+
+    public SpProvisionServiceException(String message, Throwable throwable) {
+        super(message, throwable);
+    }
 }

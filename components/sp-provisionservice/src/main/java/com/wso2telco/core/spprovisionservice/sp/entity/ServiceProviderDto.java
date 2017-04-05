@@ -17,24 +17,30 @@ package com.wso2telco.core.spprovisionservice.sp.entity;
 
 public class ServiceProviderDto {
 
-    private String applicationName;
-    private String description;
-    private int applicationId;
-    private boolean alwaysSendMappedLocalSubjectId;
-    private boolean localClaimDialect;
-    private String inboundAuthKey;
-    private String inboundAuthType;
-    private boolean confidential;
-    private String defaultValue;
-    private String propertyName;
-    private boolean propertyRequired;
-    private String propertyValue;
-    private boolean provisioningEnabled;
-    private String provisioningUserStore;
-    private String idpRoles;
-    private boolean saasApp;
-    private AdminServiceDto adminServiceDto;
+    private String applicationName = null;
+    private String description = null;
+    private int applicationId = 0;
+    private boolean alwaysSendMappedLocalSubjectId = false;
+    private boolean localClaimDialect = false;
+    private String inboundAuthKey = null;
+    private String inboundAuthType = null;
+    private boolean confidential = false;
+    private String defaultValue = null;
+    private String propertyName = null;
+    private boolean propertyRequired = false;
+    private String propertyValue = null;
+    private boolean provisioningEnabled = false;
+    private String provisioningUserStore = null;
+    private String[] idpRoles = null;
+    private boolean saasApp = false;
+    private String localAuthenticatorConfigsDisplayName = null;
+    private boolean localAuthenticatorConfigsEnabled = false;
+    private String localAuthenticatorConfigsName = null;
+    private boolean localAuthenticatorConfigsValid = false;
+    private String localAuthenticatorConfigsAuthenticationType = null;
+    private ServiceProviderConfig serviceProviderConfig = null;
     private ProvisionType existance;
+    private AdminServiceDto adminServiceDto;
 
     public String getApplicationName() {
         return applicationName;
@@ -148,11 +154,11 @@ public class ServiceProviderDto {
         this.provisioningUserStore = provisioningUserStore;
     }
 
-    public String getIdpRoles() {
+    public String[] getIdpRoles() {
         return idpRoles;
     }
 
-    public void setIdpRoles(String idpRoles) {
+    public void setIdpRoles(String[] idpRoles) {
         this.idpRoles = idpRoles;
     }
 
@@ -164,14 +170,6 @@ public class ServiceProviderDto {
         this.saasApp = saasApp;
     }
 
-    public AdminServiceDto getAdminServiceDto() {
-        return adminServiceDto;
-    }
-
-    public void setAdminServiceDto(AdminServiceDto adminServiceDto) {
-        this.adminServiceDto = adminServiceDto;
-    }
-
     public ProvisionType getExistance() {
         return existance;
     }
@@ -180,4 +178,59 @@ public class ServiceProviderDto {
         this.existance = existance;
     }
 
+    public String getLocalAuthenticatorConfigsDisplayName() {
+        return localAuthenticatorConfigsDisplayName;
+    }
+
+    public void setLocalAuthenticatorConfigsDisplayName(String localAuthenticatorConfigsDisplayName) {
+        this.localAuthenticatorConfigsDisplayName = localAuthenticatorConfigsDisplayName;
+    }
+
+    public boolean isLocalAuthenticatorConfigsEnabled() {
+        return localAuthenticatorConfigsEnabled;
+    }
+
+    public void setLocalAuthenticatorConfigsEnabled(boolean localAuthenticatorConfigsEnabled) {
+        this.localAuthenticatorConfigsEnabled = localAuthenticatorConfigsEnabled;
+    }
+
+    public String getLocalAuthenticatorConfigsName() {
+        return localAuthenticatorConfigsName;
+    }
+
+    public void setLocalAuthenticatorConfigsName(String localAuthenticatorConfigsName) {
+        this.localAuthenticatorConfigsName = localAuthenticatorConfigsName;
+    }
+
+    public boolean isLocalAuthenticatorConfigsValid() {
+        return localAuthenticatorConfigsValid;
+    }
+
+    public void setLocalAuthenticatorConfigsValid(boolean localAuthenticatorConfigsValid) {
+        this.localAuthenticatorConfigsValid = localAuthenticatorConfigsValid;
+    }
+
+    public String getLocalAuthenticatorConfigsAuthenticationType() {
+        return localAuthenticatorConfigsAuthenticationType;
+    }
+
+    public void setLocalAuthenticatorConfigsAuthenticationType(String localAuthenticatorConfigsAuthenticationType) {
+        this.localAuthenticatorConfigsAuthenticationType = localAuthenticatorConfigsAuthenticationType;
+    }
+
+    public ServiceProviderConfig getServiceProviderConfig() {
+        return serviceProviderConfig;
+    }
+
+    public void setServiceProviderConfig(ServiceProviderConfig serviceProviderConfig) {
+        this.serviceProviderConfig = serviceProviderConfig;
+    }
+
+    public AdminServiceDto getAdminServiceDto() {
+        return adminServiceDto;
+    }
+
+    public void setAdminServiceDto(AdminServiceDto adminServiceDto) {
+        this.adminServiceDto = adminServiceDto;
+    }
 }

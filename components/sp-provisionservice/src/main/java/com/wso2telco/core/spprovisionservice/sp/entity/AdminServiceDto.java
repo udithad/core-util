@@ -17,14 +17,15 @@ package com.wso2telco.core.spprovisionservice.sp.entity;
 
 public class AdminServiceDto {
 
-    private String oauthVersion;
-    private String applicationName;
-    private String callbackUrl;
-    private String grantTypes;
-    private String oauthConsumerKey;
-    private String oauthConsumerSecret;
-    private boolean pkceMandatory;
-    private boolean pkceSupportPlain;
+    private String oauthVersion = null;
+    private String applicationName = null;
+    private String callbackUrl = null;
+    private String grantTypes = null;
+    private String oauthConsumerKey = null;
+    private String oauthConsumerSecret = null;
+    private boolean pkceMandatory = false;
+    private boolean pkceSupportPlain = false;
+    private AdminServiceConfig adminServiceConfig = null;
 
     public String getOauthVersion() {
         return oauthVersion;
@@ -88,5 +89,13 @@ public class AdminServiceDto {
 
     public void setPkceSupportPlain(boolean pkceSupportPlain) {
         this.pkceSupportPlain = pkceSupportPlain;
+    }
+
+    public AdminServiceConfig getAdminServiceConfig() {
+        return adminServiceConfig;
+    }
+
+    public void setAdminServiceConfig(AdminServiceConfig adminServiceConfig) {
+        this.adminServiceConfig = adminServiceConfig;
     }
 }
