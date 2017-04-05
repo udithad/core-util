@@ -25,7 +25,6 @@ public class AdminServiceDto {
     private String oauthConsumerSecret = null;
     private boolean pkceMandatory = false;
     private boolean pkceSupportPlain = false;
-    private AdminServiceConfig adminServiceConfig = null;
 
     public String getOauthVersion() {
         return oauthVersion;
@@ -91,11 +90,4 @@ public class AdminServiceDto {
         this.pkceSupportPlain = pkceSupportPlain;
     }
 
-    public AdminServiceConfig getAdminServiceConfig() {
-        return adminServiceConfig;
-    }
-
-    public void setAdminServiceConfig(AdminServiceConfig adminServiceConfig) {
-        this.adminServiceConfig = adminServiceConfig;
-    }
 }

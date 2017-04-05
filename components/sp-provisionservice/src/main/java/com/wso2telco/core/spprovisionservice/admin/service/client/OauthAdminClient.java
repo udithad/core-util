@@ -61,7 +61,7 @@ public class OauthAdminClient {
     * */
     public OAuthConsumerAppDTO getOauthApplicationDataByAppName(String appName) throws SpProvisionServiceException {
 
-        OAuthConsumerAppDTO apps;
+        OAuthConsumerAppDTO apps = null;
         authenticate(client);
 
         try {
@@ -69,9 +69,9 @@ public class OauthAdminClient {
         } catch (RemoteException e) {
             throw new SpProvisionServiceException(e.getMessage());
         } catch (OAuthAdminServiceException e) {
-            throw new SpProvisionServiceException(e.getMessage());
+          throw new SpProvisionServiceException(e.getMessage());
         } catch (NullPointerException e) {
-            return null;
+            return apps;
         }
         return apps;
     }

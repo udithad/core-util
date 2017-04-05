@@ -23,6 +23,8 @@ import org.apache.axis2.AxisFault;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.ServiceClient;
 import org.apache.axis2.transport.http.HttpTransportProperties;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.identity.application.common.model.xsd.ServiceProvider;
 import org.wso2.carbon.identity.application.mgt.stub.IdentityApplicationManagementServiceIdentityApplicationManagementException;
 import org.wso2.carbon.identity.application.mgt.stub.IdentityApplicationManagementServiceStub;
@@ -34,7 +36,7 @@ public class ApplicationManagementClient {
     private IdentityApplicationManagementServiceStub stub = null;
     private ServiceClient client = null;
     private TransformServiceProviderDto transformServiceProviderDto = null;
-
+    private static Log log = LogFactory.getLog(ApplicationManagementClient.class);
 
     public ApplicationManagementClient() {
         createAndAuthenticateStub();
@@ -72,32 +74,47 @@ public class ApplicationManagementClient {
     public void createSpApplication(ServiceProviderDto serviceProviderDto) throws SpProvisionServiceException {
 
         authenticate(client);
-        transformServiceProviderDto = new TransformServiceProviderDto();
-        ServiceProvider serviceProvider = transformServiceProviderDto.transformToServiceProviderToCreateApplication(serviceProviderDto);
-        try {
-            stub.createApplication(serviceProvider);
-        } catch (RemoteException e) {
-            throw new SpProvisionServiceException(e.getMessage());
-        } catch (IdentityApplicationManagementServiceIdentityApplicationManagementException e) {
-            throw new SpProvisionServiceException(e.getMessage());
-        } catch (Exception e) {
-            throw new SpProvisionServiceException(e.getMessage());
+
+        if(serviceProviderDto != null){
+            transformServiceProviderDto = new TransformServiceProviderDto();
+            ServiceProvider serviceProvider = transformServiceProviderDto.transformToServiceProviderToCreateApplication(serviceProviderDto);
+            try {
+                stub.createApplication(serviceProvider);
+            } catch (RemoteException e) {
+                throw new SpProvisionServiceException(e.getMessage());
+            } catch (IdentityApplicationManagementServiceIdentityApplicationManagementException e) {
+                throw new SpProvisionServiceException(e.getMessage());
+            } catch (Exception e) {
+                throw new SpProvisionServiceException(e.getMessage());
+            }
         }
+        else
+        {
+            log.error("Service provider details are null");
+        }
+
     }
 
     public void updateSpApplication(ServiceProviderDto serviceProviderDto) throws SpProvisionServiceException {
 
         authenticate(client);
-        transformServiceProviderDto = new TransformServiceProviderDto();
-        ServiceProvider serviceProvider = transformServiceProviderDto.transformToServiceProviderToUpdateApplication(serviceProviderDto);
-        try {
-            stub.updateApplication(serviceProvider);
-        } catch (RemoteException e) {
-            throw new SpProvisionServiceException(e.getMessage());
-        } catch (IdentityApplicationManagementServiceIdentityApplicationManagementException e) {
-            throw new SpProvisionServiceException(e.getMessage());
-        } catch (Exception e) {
-            throw new SpProvisionServiceException(e.getMessage());
+
+        if(serviceProviderDto != null){
+            transformServiceProviderDto = new TransformServiceProviderDto();
+            ServiceProvider serviceProvider = transformServiceProviderDto.transformToServiceProviderToUpdateApplication(serviceProviderDto);
+            try {
+                stub.updateApplication(serviceProvider);
+            } catch (RemoteException e) {
+                throw new SpProvisionServiceException(e.getMessage());
+            } catch (IdentityApplicationManagementServiceIdentityApplicationManagementException e) {
+                throw new SpProvisionServiceException(e.getMessage());
+            } catch (Exception e) {
+                throw new SpProvisionServiceException(e.getMessage());
+            }
+        }
+        else
+        {
+            log.error("Service provider details are null");
         }
     }
 

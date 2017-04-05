@@ -45,19 +45,19 @@ public class OauthAdminServiceImpl implements OauthAdminService {
     public void registerOAuthApplicationData(AdminServiceDto adminServiceDto) throws SpProvisionServiceException {
 
         oauthAdminServiceClient = new OauthAdminClient();
-        try {
-            oAuthConsumerAppDTO = oauthAdminServiceClient.getOauthApplicationDataByAppName(adminServiceDto.getApplicationName());
-            if (oAuthConsumerAppDTO != null) {
-                if (!(oAuthConsumerAppDTO.getOauthConsumerKey().equals(adminServiceDto.getOauthConsumerKey())) || !(oAuthConsumerAppDTO.getOauthConsumerSecret().equals(adminServiceDto.getOauthConsumerSecret()))) {
-                    removeOAuthApplicationData(oAuthConsumerAppDTO.getOauthConsumerKey());
-                    registerOAuthApplicationData(adminServiceDto);
-                }
-            } else {
+//        try {
+//            oAuthConsumerAppDTO = oauthAdminServiceClient.getOauthApplicationDataByAppName(adminServiceDto.getApplicationName());
+//            if (oAuthConsumerAppDTO != null) {
+//                if (!(oAuthConsumerAppDTO.getOauthConsumerKey().equals(adminServiceDto.getOauthConsumerKey())) || !(oAuthConsumerAppDTO.getOauthConsumerSecret().equals(adminServiceDto.getOauthConsumerSecret()))) {
+//                    removeOAuthApplicationData(oAuthConsumerAppDTO.getOauthConsumerKey());
+//                    registerOAuthApplicationData(adminServiceDto);
+//                }
+//            } else {
                 oauthAdminServiceClient.registerOauthApplicationData(adminServiceDto);
-            }
-        } catch (SpProvisionServiceException e) {
-            throw new SpProvisionServiceException(e.getMessage());
-        }
+ //           }
+//        } catch (SpProvisionServiceException e) {
+//            throw new SpProvisionServiceException(e.getMessage());
+//        }
     }
 
 }

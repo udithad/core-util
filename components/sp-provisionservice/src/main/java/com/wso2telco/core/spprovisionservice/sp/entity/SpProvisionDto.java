@@ -20,6 +20,7 @@ public class SpProvisionDto {
     private ServiceProviderDto serviceProviderDto = null;
     private SpProvisionConfig spProvisionConfig = null;
     private ProvisionType provisionType = null;
+    private DiscoveryServiceDto discoveryServiceDto = null;
 
     public ServiceProviderDto getServiceProviderDto() {
         return serviceProviderDto;
@@ -43,5 +44,13 @@ public class SpProvisionDto {
 
     public void setProvisionType(ProvisionType provisionType) {
         this.provisionType = provisionType;
+    }
+
+    public DiscoveryServiceDto getDiscoveryServiceDto() {
+        return discoveryServiceDto;
+    }
+
+    public void setDiscoveryServiceDto(DiscoveryServiceDto discoveryServiceDto) {
+        this.discoveryServiceDto = discoveryServiceDto;
     }
 }
