@@ -8,11 +8,11 @@
 	<version>2.0.4-SNAPSHOT</version>
 	<name>pcr-service</name>
 	<url>http://maven.apache.org</url>
-    <parent>
-        <groupId>org.wso2</groupId>
-        <artifactId>wso2</artifactId>
-        <version>1</version>
-    </parent>
+	<parent>
+		<groupId>org.wso2</groupId>
+		<artifactId>wso2</artifactId>
+		<version>1</version>
+	</parent>
 
 	<build>
 		<plugins>
@@ -52,16 +52,16 @@
 				<version>1.4.0</version>
 				<configuration>
 					<instructions>
-                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-                        <Bundle-Name>${project.artifactId}</Bundle-Name>
-                        <Bundle-Version>${project.version}</Bundle-Version>
-                        <Bundle-Description>PCR Service Bundle</Bundle-Description>
-                        <Private-Package>com.wso2telco.core.pcrservice.internal</Private-Package>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+						<Bundle-Name>${project.artifactId}</Bundle-Name>
+						<Bundle-Version>${project.version}</Bundle-Version>
+						<Bundle-Description>PCR Service Bundle</Bundle-Description>
+						<Private-Package>com.wso2telco.core.pcrservice.internal</Private-Package>
 						<Export-Package>
 							!com.wso2telco.core.pcrservice.internal,
 							com.wso2telco.core.pcrservice.*,
 						</Export-Package>
-						<Import-Package>							
+						<Import-Package>
 							org.wso2.carbon.identity.*;version="${wso2.carbon.identity.version}",
 							org.apache.axis2.*;version="${axis2.version}",
 							org.wso2.carbon.utils.*;version="${org.wso2.carbon.utils.version}",
@@ -117,11 +117,11 @@
 			<artifactId>commons-pool</artifactId>
 			<version>${commons-pool.version}</version>
 		</dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-pool2</artifactId>
-            <version>${commons-pool2.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-pool2</artifactId>
+			<version>${commons-pool2.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.wso2.carbon</groupId>
 			<artifactId>org.wso2.carbon.utils</artifactId>
@@ -163,6 +163,20 @@
 			<artifactId>snakeyaml</artifactId>
 			<version>${snakeyaml.version}</version>
 		</dependency>
+
+
+		<dependency>
+			<groupId>org.wso2.carbon.identity</groupId>
+			<artifactId>org.wso2.carbon.identity.application.mgt.stub</artifactId>
+			<version>5.2.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.wso2.carbon</groupId>
+			<artifactId>org.wso2.carbon.user.mgt.stub</artifactId>
+			<version>4.2.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<properties>
@@ -175,7 +189,7 @@
 		<wso2.carbon.identity.version>5.1.3</wso2.carbon.identity.version>
 		<axis2.version>1.6.1.wso2v10</axis2.version>
 		<commons-pool.version>1.4</commons-pool.version>
-        <commons-pool2.version>2.2</commons-pool2.version>
+		<commons-pool2.version>2.2</commons-pool2.version>
 		<junit.version>4.11</junit.version>
 		<org.slf4j.verison>1.6.1</org.slf4j.verison>
 		<com.fasterxml.jackson.version>2.8.3</com.fasterxml.jackson.version>

@@ -2406,6 +2406,17 @@ public class MobileConnectConfig {
             this.mobileNetworkOperatorBasedSelectionEnabled = mobileNetworkOperatorBasedSelectionEnabled;
         }
     }
+    
+    private boolean seamlessProvisioningEnabled;
+
+    @XmlElement(name = "SeamlessProvisioningEnabled")
+    public boolean isSeamlessProvisioningEnabled() {
+        return seamlessProvisioningEnabled;
+    }
+
+    public void setSeamlessProvisioningEnabled(boolean seamlessProvisioningEnabled) {
+        this.seamlessProvisioningEnabled = seamlessProvisioningEnabled;
+    }
 
     private DiscoveryConfig discoveryConfig;
 
