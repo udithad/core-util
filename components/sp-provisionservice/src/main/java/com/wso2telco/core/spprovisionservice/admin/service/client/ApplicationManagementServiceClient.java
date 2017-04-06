@@ -103,9 +103,9 @@ public class ApplicationManagementServiceClient {
     public void updateSpApplication(ServiceProviderDto serviceProviderDto) throws SpProvisionServiceException {
 
         transformServiceProviderDto = new TransformServiceProviderDto();
-        ServiceProvider application = transformServiceProviderDto.transformToServiceProviderToUpdateApplication(serviceProviderDto);
+        ServiceProvider serviceProvider = transformServiceProviderDto.transformToServiceProviderToUpdateApplication(getSpApplicationData(serviceProviderDto.getApplicationName()), serviceProviderDto);
         try {
-            identityApplicationManagementServiceStub.updateApplication(application);
+            identityApplicationManagementServiceStub.updateApplication(serviceProvider);
         } catch (RemoteException e) {
             throw new SpProvisionServiceException(e.getMessage());
         } catch (IdentityApplicationManagementServiceIdentityApplicationManagementException e) {

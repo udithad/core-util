@@ -31,6 +31,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.identity.application.common.model.xsd.ServiceProvider;
 import org.wso2.carbon.identity.application.mgt.stub.IdentityApplicationManagementServiceIdentityApplicationManagementException;
 import org.wso2.carbon.identity.application.mgt.stub.IdentityApplicationManagementServiceStub;
+
 import java.rmi.RemoteException;
 
 public class ApplicationManagementClient {
@@ -103,7 +104,8 @@ public class ApplicationManagementClient {
 
         if (serviceProviderDto != null) {
             transformServiceProviderDto = new TransformServiceProviderDto();
-            ServiceProvider serviceProvider = transformServiceProviderDto.transformToServiceProviderToUpdateApplication(serviceProviderDto);
+
+            ServiceProvider serviceProvider = transformServiceProviderDto.transformToServiceProviderToUpdateApplication(getSpApplicationData(serviceProviderDto.getApplicationName()), serviceProviderDto);
             try {
                 stub.updateApplication(serviceProvider);
             } catch (RemoteException e) {
