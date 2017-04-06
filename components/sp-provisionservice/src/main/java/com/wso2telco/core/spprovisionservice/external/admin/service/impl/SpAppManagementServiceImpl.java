@@ -33,14 +33,29 @@ public class SpAppManagementServiceImpl implements SpAppManagementService {
     }
 
     @Override
-    public void createSpApplication(ServiceProviderDto serviceProviderDto) throws SpProvisionServiceException {
+    public boolean createSpApplication(ServiceProviderDto serviceProviderDto) throws SpProvisionServiceException {
 
-        try {
-            applicationManagementServiceClient.createSpApplication(serviceProviderDto);
-        } catch (SpProvisionServiceException e) {
-            log.error("Error occurred in remove create Service Provider Application " + e.getMessage());
-            throw new SpProvisionServiceException(e.getMessage());
+        boolean success =  true;
+        boolean failure = false;
+        boolean status;
+
+//        if((serviceProviderDto != null) && (getSpApplicationData(serviceProviderDto.getApplicationName())) == null){
+
+        if(serviceProviderDto != null){
+            try {
+                applicationManagementServiceClient.createSpApplication(serviceProviderDto);
+                status = success;
+            } catch (SpProvisionServiceException e) {
+                log.error("Error occurred in remove create Service Provider Application " + e.getMessage());
+                throw new SpProvisionServiceException(e.getMessage());
+            }
         }
+        else
+        {
+            log.error("Service provider details are null");
+            status = failure;
+        }
+        return status;
     }
 
     @Override

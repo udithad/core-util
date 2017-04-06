@@ -15,6 +15,10 @@
  ******************************************************************************/
 package com.wso2telco.core.spprovisionservice.admin.config;
 
+import com.wso2telco.core.config.model.MobileConnectConfig;
+import com.wso2telco.core.config.service.ConfigurationService;
+import com.wso2telco.core.config.service.ConfigurationServiceImpl;
+
 public class AdministrationServiceConfig {
 
     private static AdministrationServiceConfig config = null;
@@ -22,6 +26,8 @@ public class AdministrationServiceConfig {
     private String password;
     private String adminServicesHostUrl;
     private String applicationManagementHostUrl;
+    private MobileConnectConfig mobileConnectConfig ;
+    private ConfigurationService configurationService = new ConfigurationServiceImpl();
 
     /**
      * The maximum total http connection.
@@ -38,12 +44,14 @@ public class AdministrationServiceConfig {
      */
     public AdministrationServiceConfig() {
 
-        adminServicesHostUrl = "https://localhost:9443/services/OAuthAdminService";
-        applicationManagementHostUrl = "https://localhost:9443/services/IdentityApplicationManagementService";
-        username = "admin";
-        password = "admin";
-        maximumTotalHttpConnection = 100;
-        maximumHttpConnectionPerHost = 2;
+        mobileConnectConfig = configurationService.getDataHolder().getMobileConnectConfig();
+        adminServicesHostUrl = mobileConnectConfig.getSpProvisionConfig().getAdminServiceUrl();
+        applicationManagementHostUrl = mobileConnectConfig.getSpProvisionConfig().getApplicationManagementHostUrl();
+        username = mobileConnectConfig.getSpProvisionConfig().getStubAccessUserName();
+        password = mobileConnectConfig.getSpProvisionConfig().getStubAccessPassword();
+        maximumTotalHttpConnection = mobileConnectConfig.getSpProvisionConfig().getMaximumTotalHttpConections();
+        maximumHttpConnectionPerHost = mobileConnectConfig.getSpProvisionConfig().getMaximumHttpConnectionsPerHost();
+
     }
 
     /**

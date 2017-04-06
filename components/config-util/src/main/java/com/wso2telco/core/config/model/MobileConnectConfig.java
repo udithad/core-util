@@ -2406,7 +2406,7 @@ public class MobileConnectConfig {
             this.mobileNetworkOperatorBasedSelectionEnabled = mobileNetworkOperatorBasedSelectionEnabled;
         }
     }
-    
+
     private boolean seamlessProvisioningEnabled;
 
     @XmlElement(name = "SeamlessProvisioningEnabled")
@@ -2572,4 +2572,307 @@ public class MobileConnectConfig {
             this.password = password;
         }
     }
+
+    /*
+    * SP Provision confid
+    * */
+    private SpProvisionConfig spProvisionConfig;
+
+    @XmlElement(name = "SpProvisionConfig")
+    public SpProvisionConfig getSpProvisionConfig() {
+        return spProvisionConfig;
+    }
+
+    public void setSpProvisionConfig(SpProvisionConfig spProvisionConfig) {
+        this.spProvisionConfig = spProvisionConfig;
+    }
+
+    public static class SpProvisionConfig {
+
+        private String adminServiceUrl;
+        private String ApplicationManagementHostUrl;
+        private String stubAccessUserName;
+        private String stubAccessPassword;
+        private int maximumTotalHttpConnections;
+        private int maximumHttpConnectionsPerHost;
+        private Config config;
+
+        @XmlElement(name = "AdminServiceHostUrl")
+        public String getAdminServiceUrl() {
+            return adminServiceUrl;
+        }
+
+        public void setAdminServiceUrl(String adminServiceUrl) {
+            this.adminServiceUrl = adminServiceUrl;
+        }
+
+        @XmlElement(name = "ApplicationManagementHostUrl")
+        public String getApplicationManagementHostUrl() {
+            return ApplicationManagementHostUrl;
+        }
+
+        public void setApplicationManagementHostUrl(String applicationManagementHostUrl) {
+            ApplicationManagementHostUrl = applicationManagementHostUrl;
+        }
+
+        @XmlElement(name = "UserName")
+        public String getStubAccessUserName() {
+            return stubAccessUserName;
+        }
+
+        public void setStubAccessUserName(String stubAccessUserName) {
+            this.stubAccessUserName = stubAccessUserName;
+        }
+
+        @XmlElement(name = "Password")
+        public String getStubAccessPassword() {
+            return stubAccessPassword;
+        }
+
+        public void setStubAccessPassword(String stubAccessPassword) {
+            this.stubAccessPassword = stubAccessPassword;
+        }
+
+        @XmlElement(name = "MaximumTotalHttpConections")
+        public int getMaximumTotalHttpConections() {
+            return maximumTotalHttpConnections;
+        }
+
+        public void setMaximumTotalHttpConections(int maximumTotalHttpConections) {
+            this.maximumTotalHttpConnections = maximumTotalHttpConections;
+        }
+
+        @XmlElement(name = "MaximumHttpConnectionsPerHost")
+        public int getMaximumHttpConnectionsPerHost() {
+            return maximumHttpConnectionsPerHost;
+        }
+
+        public void setMaximumHttpConnectionsPerHost(int maximumHttpConnectionsPerHost) {
+            this.maximumHttpConnectionsPerHost = maximumHttpConnectionsPerHost;
+        }
+
+        @XmlElement(name = "config")
+        public Config getConfig() {
+            return config;
+        }
+
+        public void setConfig(Config config) {
+            this.config = config;
+        }
+    }
+
+    public static class Config {
+
+        private boolean alwaysSendMappedLocalSubjectId;
+        private boolean localClaimDialect;
+        private String inboundAuthType;
+        private boolean confidential;
+        private String defaultValue;
+        private String propertyName;
+        private boolean propertyRequired;
+        private boolean provisioningEnabled;
+        private String provisioningUserStore;
+        private boolean saasApp;
+        private String localAuthenticatorConfigsDisplayName;
+        private boolean localAuthenticatorConfigsEnabled;
+        private String localAuthenticatorConfigsName;
+        private boolean localAuthenticatorConfigsValid;
+        private String localAuthenticatorConfigsAuthenticationType;
+        private String username;
+        private String password;
+        private String oAuthVersion;
+        private String grantTypes;
+        private boolean pkceMandatory;
+        private boolean pkceSupportPlain;
+
+        @XmlElement(name = "AlwaysSendMappedLocalSubjectId")
+        public boolean isAlwaysSendMappedLocalSubjectId() {
+            return alwaysSendMappedLocalSubjectId;
+        }
+
+        public void setAlwaysSendMappedLocalSubjectId(boolean alwaysSendMappedLocalSubjectId) {
+            this.alwaysSendMappedLocalSubjectId = alwaysSendMappedLocalSubjectId;
+        }
+
+        @XmlElement(name = "LocalClaimDialect")
+        public boolean isLocalClaimDialect() {
+            return localClaimDialect;
+        }
+
+        public void setLocalClaimDialect(boolean localClaimDialect) {
+            this.localClaimDialect = localClaimDialect;
+        }
+
+        @XmlElement(name = "InboundAuthType")
+        public String getInboundAuthType() {
+            return inboundAuthType;
+        }
+
+        public void setInboundAuthType(String inboundAuthType) {
+            this.inboundAuthType = inboundAuthType;
+        }
+
+        @XmlElement(name = "Confidential")
+        public boolean isConfidential() {
+            return confidential;
+        }
+
+        public void setConfidential(boolean confidential) {
+            this.confidential = confidential;
+        }
+
+        @XmlElement(name = "DefaultValue")
+        public String getDefaultValue() {
+            return defaultValue;
+        }
+
+        public void setDefaultValue(String defaultValue) {
+            this.defaultValue = defaultValue;
+        }
+
+        @XmlElement(name = "PropertyName")
+        public String getPropertyName() {
+            return propertyName;
+        }
+
+        public void setPropertyName(String propertyName) {
+            this.propertyName = propertyName;
+        }
+
+        @XmlElement(name = "PropertyRequired")
+        public boolean isPropertyRequired() {
+            return propertyRequired;
+        }
+
+        public void setPropertyRequired(boolean propertyRequired) {
+            this.propertyRequired = propertyRequired;
+        }
+
+        @XmlElement(name = "ProvisioningEnabled")
+        public boolean isProvisioningEnabled() {
+            return provisioningEnabled;
+        }
+
+        public void setProvisioningEnabled(boolean provisioningEnabled) {
+            this.provisioningEnabled = provisioningEnabled;
+        }
+
+        @XmlElement(name = "ProvisioningUserStore")
+        public String getProvisioningUserStore() {
+            return provisioningUserStore;
+        }
+
+        public void setProvisioningUserStore(String provisioningUserStore) {
+            this.provisioningUserStore = provisioningUserStore;
+        }
+
+        @XmlElement(name = "SaasApp")
+        public boolean isSaasApp() {
+            return saasApp;
+        }
+
+        public void setSaasApp(boolean saasApp) {
+            this.saasApp = saasApp;
+        }
+
+        @XmlElement(name = "LocalAuthenticatorConfigsDisplayName")
+        public String getLocalAuthenticatorConfigsDisplayName() {
+            return localAuthenticatorConfigsDisplayName;
+        }
+
+        public void setLocalAuthenticatorConfigsDisplayName(String localAuthenticatorConfigsDisplayName) {
+            this.localAuthenticatorConfigsDisplayName = localAuthenticatorConfigsDisplayName;
+        }
+
+        @XmlElement(name = "LocalAuthenticatorConfigsEnabled")
+        public boolean isLocalAuthenticatorConfigsEnabled() {
+            return localAuthenticatorConfigsEnabled;
+        }
+
+        public void setLocalAuthenticatorConfigsEnabled(boolean localAuthenticatorConfigsEnabled) {
+            this.localAuthenticatorConfigsEnabled = localAuthenticatorConfigsEnabled;
+        }
+
+        @XmlElement(name = "LocalAuthenticatorConfigsName")
+        public String getLocalAuthenticatorConfigsName() {
+            return localAuthenticatorConfigsName;
+        }
+
+        public void setLocalAuthenticatorConfigsName(String localAuthenticatorConfigsName) {
+            this.localAuthenticatorConfigsName = localAuthenticatorConfigsName;
+        }
+
+        @XmlElement(name = "LocalAuthenticatorConfigsValid")
+        public boolean isLocalAuthenticatorConfigsValid() {
+            return localAuthenticatorConfigsValid;
+        }
+
+        public void setLocalAuthenticatorConfigsValid(boolean localAuthenticatorConfigsValid) {
+            this.localAuthenticatorConfigsValid = localAuthenticatorConfigsValid;
+        }
+
+        @XmlElement(name = "LocalAuthenticatorConfigsAuthenticationType")
+        public String getLocalAuthenticatorConfigsAuthenticationType() {
+            return localAuthenticatorConfigsAuthenticationType;
+        }
+
+        public void setLocalAuthenticatorConfigsAuthenticationType(String localAuthenticatorConfigsAuthenticationType) {
+            this.localAuthenticatorConfigsAuthenticationType = localAuthenticatorConfigsAuthenticationType;
+        }
+
+        @XmlElement(name = "UserName")
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        @XmlElement(name = "Password")
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+        @XmlElement(name = "OauthVersion")
+        public String getoAuthVersion() {
+            return oAuthVersion;
+        }
+
+        public void setoAuthVersion(String oAuthVersion) {
+            this.oAuthVersion = oAuthVersion;
+        }
+
+        @XmlElement(name = "GrantTypes")
+        public String getGrantTypes() {
+            return grantTypes;
+        }
+
+        public void setGrantTypes(String grantTypes) {
+            this.grantTypes = grantTypes;
+        }
+
+        @XmlElement(name = "PkceMandatory")
+        public boolean isPkceMandatory() {
+            return pkceMandatory;
+        }
+
+        public void setPkceMandatory(boolean pkceMandatory) {
+            this.pkceMandatory = pkceMandatory;
+        }
+
+        @XmlElement(name = "PkceSupportPlain")
+        public boolean isPkceSupportPlain() {
+            return pkceSupportPlain;
+        }
+
+        public void setPkceSupportPlain(boolean pkceSupportPlain) {
+            this.pkceSupportPlain = pkceSupportPlain;
+        }
+    }
+
 }

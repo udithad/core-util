@@ -21,7 +21,7 @@ import org.wso2.carbon.identity.application.common.model.xsd.ServiceProvider;
 
 public interface SpAppManagementService {
 
-    void createSpApplication(ServiceProviderDto serviceProviderDto) throws SpProvisionServiceException;
+    boolean createSpApplication(ServiceProviderDto serviceProviderDto) throws SpProvisionServiceException;
 
     void updateSpApplication(ServiceProviderDto serviceProviderDto) throws SpProvisionServiceException;
 

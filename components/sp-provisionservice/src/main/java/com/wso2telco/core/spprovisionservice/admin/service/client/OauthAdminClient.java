@@ -15,6 +15,9 @@
  ******************************************************************************/
 package com.wso2telco.core.spprovisionservice.admin.service.client;
 
+import com.wso2telco.core.config.model.MobileConnectConfig;
+import com.wso2telco.core.config.service.ConfigurationService;
+import com.wso2telco.core.config.service.ConfigurationServiceImpl;
 import com.wso2telco.core.spprovisionservice.admin.config.AdministrationServiceConfig;
 import com.wso2telco.core.spprovisionservice.external.admin.service.dataTransform.TransformAdminServiceDto;
 import com.wso2telco.core.spprovisionservice.sp.entity.AdminServiceDto;
@@ -38,9 +41,11 @@ public class OauthAdminClient {
     private TransformAdminServiceDto transformAdminServiceDto = null;
     private OAuthAdminServiceStub oAuthAdminServiceStub = null;
     private ServiceClient client = null;
-
+    private MobileConnectConfig mobileConnectConfig;
+    private ConfigurationService configurationService = new ConfigurationServiceImpl();
 
     public OauthAdminClient() {
+        mobileConnectConfig = configurationService.getDataHolder().getMobileConnectConfig();
         createAndAuthenticateStub();
     }
 
@@ -69,7 +74,7 @@ public class OauthAdminClient {
         } catch (RemoteException e) {
             throw new SpProvisionServiceException(e.getMessage());
         } catch (OAuthAdminServiceException e) {
-          throw new SpProvisionServiceException(e.getMessage());
+            throw new SpProvisionServiceException(e.getMessage());
         } catch (NullPointerException e) {
             return apps;
         }
@@ -127,11 +132,11 @@ public class OauthAdminClient {
         }
     }
 
-    public static void authenticate(ServiceClient client) {
+    public void authenticate(ServiceClient client) {
         Options option = client.getOptions();
         HttpTransportProperties.Authenticator auth = new HttpTransportProperties.Authenticator();
-        auth.setUsername("admin");
-        auth.setPassword("admin");
+        auth.setUsername(mobileConnectConfig.getSpProvisionConfig().getStubAccessUserName());
+        auth.setPassword(mobileConnectConfig.getSpProvisionConfig().getStubAccessPassword());
         auth.setPreemptiveAuthentication(true);
         option.setProperty(org.apache.axis2.transport.http.HTTPConstants.AUTHENTICATE, auth);
         option.setManageSession(true);

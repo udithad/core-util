@@ -15,6 +15,9 @@
  ******************************************************************************/
 package com.wso2telco.core.spprovisionservice.admin.service.client;
 
+import com.wso2telco.core.config.model.MobileConnectConfig;
+import com.wso2telco.core.config.service.ConfigurationService;
+import com.wso2telco.core.config.service.ConfigurationServiceImpl;
 import com.wso2telco.core.spprovisionservice.admin.config.AdministrationServiceConfig;
 import com.wso2telco.core.spprovisionservice.external.admin.service.dataTransform.TransformServiceProviderDto;
 import com.wso2telco.core.spprovisionservice.sp.entity.ServiceProviderDto;
@@ -28,7 +31,6 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.identity.application.common.model.xsd.ServiceProvider;
 import org.wso2.carbon.identity.application.mgt.stub.IdentityApplicationManagementServiceIdentityApplicationManagementException;
 import org.wso2.carbon.identity.application.mgt.stub.IdentityApplicationManagementServiceStub;
-
 import java.rmi.RemoteException;
 
 public class ApplicationManagementClient {
@@ -37,8 +39,11 @@ public class ApplicationManagementClient {
     private ServiceClient client = null;
     private TransformServiceProviderDto transformServiceProviderDto = null;
     private static Log log = LogFactory.getLog(ApplicationManagementClient.class);
+    private MobileConnectConfig mobileConnectConfig;
+    private ConfigurationService configurationService = new ConfigurationServiceImpl();
 
     public ApplicationManagementClient() {
+        mobileConnectConfig = configurationService.getDataHolder().getMobileConnectConfig();
         createAndAuthenticateStub();
     }
 
@@ -75,7 +80,7 @@ public class ApplicationManagementClient {
 
         authenticate(client);
 
-        if(serviceProviderDto != null){
+        if (serviceProviderDto != null) {
             transformServiceProviderDto = new TransformServiceProviderDto();
             ServiceProvider serviceProvider = transformServiceProviderDto.transformToServiceProviderToCreateApplication(serviceProviderDto);
             try {
@@ -87,19 +92,16 @@ public class ApplicationManagementClient {
             } catch (Exception e) {
                 throw new SpProvisionServiceException(e.getMessage());
             }
-        }
-        else
-        {
+        } else {
             log.error("Service provider details are null");
         }
-
     }
 
     public void updateSpApplication(ServiceProviderDto serviceProviderDto) throws SpProvisionServiceException {
 
         authenticate(client);
 
-        if(serviceProviderDto != null){
+        if (serviceProviderDto != null) {
             transformServiceProviderDto = new TransformServiceProviderDto();
             ServiceProvider serviceProvider = transformServiceProviderDto.transformToServiceProviderToUpdateApplication(serviceProviderDto);
             try {
@@ -111,9 +113,7 @@ public class ApplicationManagementClient {
             } catch (Exception e) {
                 throw new SpProvisionServiceException(e.getMessage());
             }
-        }
-        else
-        {
+        } else {
             log.error("Service provider details are null");
         }
     }
@@ -132,11 +132,11 @@ public class ApplicationManagementClient {
         }
     }
 
-    public static void authenticate(ServiceClient client) {
+    public void authenticate(ServiceClient client) {
         Options option = client.getOptions();
         HttpTransportProperties.Authenticator auth = new HttpTransportProperties.Authenticator();
-        auth.setUsername("admin");
-        auth.setPassword("admin");
+        auth.setUsername(mobileConnectConfig.getSpProvisionConfig().getStubAccessUserName());
+        auth.setPassword(mobileConnectConfig.getSpProvisionConfig().getStubAccessPassword());
         auth.setPreemptiveAuthentication(true);
         option.setProperty(org.apache.axis2.transport.http.HTTPConstants.AUTHENTICATE, auth);
         option.setManageSession(true);

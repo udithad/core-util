@@ -42,22 +42,56 @@ public class OauthAdminServiceImpl implements OauthAdminService {
     }
 
     @Override
-    public void registerOAuthApplicationData(AdminServiceDto adminServiceDto) throws SpProvisionServiceException {
+    public boolean registerOAuthApplicationData(AdminServiceDto adminServiceDto) {
 
-        oauthAdminServiceClient = new OauthAdminClient();
-//        try {
-//            oAuthConsumerAppDTO = oauthAdminServiceClient.getOauthApplicationDataByAppName(adminServiceDto.getApplicationName());
-//            if (oAuthConsumerAppDTO != null) {
-//                if (!(oAuthConsumerAppDTO.getOauthConsumerKey().equals(adminServiceDto.getOauthConsumerKey())) || !(oAuthConsumerAppDTO.getOauthConsumerSecret().equals(adminServiceDto.getOauthConsumerSecret()))) {
-//                    removeOAuthApplicationData(oAuthConsumerAppDTO.getOauthConsumerKey());
-//                    registerOAuthApplicationData(adminServiceDto);
-//                }
-//            } else {
+        boolean success =true;
+        boolean failure = false;
+        boolean status = false;
+
+        if(adminServiceDto != null){
+            oauthAdminServiceClient = new OauthAdminClient();
+           try {
+//                oAuthConsumerAppDTO = oauthAdminServiceClient.getOauthApplicationDataByAppName(adminServiceDto.getApplicationName());
+//                if (oAuthConsumerAppDTO != null) {
+//                    if ((oAuthConsumerAppDTO.getOauthConsumerKey().equals(adminServiceDto.getOauthConsumerKey()))) {
+//
+//                        if(adminServiceDto.getOauthConsumerSecret()!= null && (oAuthConsumerAppDTO.getOauthConsumerSecret().equals(adminServiceDto.getOauthConsumerSecret()))){
+//                            log.info("The Service Provider OAuth details are already available in the database");
+//                            status = failure;
+//                        }
+//                        else if(adminServiceDto.getOauthConsumerSecret()!= null && !(oAuthConsumerAppDTO.getOauthConsumerSecret().equals(adminServiceDto.getOauthConsumerSecret()))){
+//                            removeOAuthApplicationData(oAuthConsumerAppDTO.getOauthConsumerKey());
+//                            registerOAuthApplicationData(adminServiceDto);
+//                            status = success;
+//                        }
+//                        else if(adminServiceDto.getOauthConsumerSecret() == null){
+//                            removeOAuthApplicationData(oAuthConsumerAppDTO.getOauthConsumerKey());
+//                            registerOAuthApplicationData(adminServiceDto);
+//                            status = success;
+//                        }
+//
+//                        }else{
+//                        log.info("The Service Provider OAuth details are mismatch for given Service Provider");
+//                        status = failure;
+//                    }
+//                    }
+//                } catch (SpProvisionServiceException e) {
+//                   log.info("Exception occurred in register Oauthdata for Service Provider "+e.getMessage());
+//                   status =failure;
+//            }
+//            }
+//        else {
+//            try {
+
                 oauthAdminServiceClient.registerOauthApplicationData(adminServiceDto);
- //           }
-//        } catch (SpProvisionServiceException e) {
-//            throw new SpProvisionServiceException(e.getMessage());
-//        }
-    }
 
+//                status = success;
+         }
+            catch (SpProvisionServiceException e) {
+                log.info("Exception occurred in register Oauthdata for Service Provider "+e.getMessage());
+                status =failure;
+            }
+        }
+        return status;
+        }
 }
