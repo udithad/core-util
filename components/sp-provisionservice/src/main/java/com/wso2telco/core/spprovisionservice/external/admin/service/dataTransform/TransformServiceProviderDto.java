@@ -23,11 +23,7 @@ import org.wso2.carbon.identity.application.common.model.xsd.*;
 public class TransformServiceProviderDto {
 
     private ServiceProvider serviceProvider = null;
-    private ClaimConfig claimConfig = null;
-    private InboundAuthenticationConfig inboundAuthenticationConfig = null;
-    private InboundProvisioningConfig inboundProvisioningConfig = null;
-    private LocalAndOutboundAuthenticationConfig localAndOutBoundAuthenticationConfig = null;
-    private PermissionsAndRoleConfig permissionAndRoleConfig = null;
+
     private static Log log = LogFactory.getLog(TransformServiceProviderDto.class);
 
     /*
@@ -51,35 +47,27 @@ public class TransformServiceProviderDto {
         serviceProviderObject.setApplicationID(serviceProviderDto.getApplicationId());
         serviceProviderObject.setDescription(serviceProviderDto.getDescription());
         serviceProviderObject.setSaasApp(serviceProviderDto.isSaasApp());
-
-        claimConfig = setClaimConfigObject(serviceProviderDto);
-        serviceProviderObject.setClaimConfig(claimConfig);
-
-        inboundAuthenticationConfig = setInboundAuthenticationConfigObject(serviceProviderDto);
-        serviceProviderObject.setInboundAuthenticationConfig(inboundAuthenticationConfig);
-
-        inboundProvisioningConfig = setInboundProvisioningConfigObject(serviceProviderDto);
-        serviceProviderObject.setInboundProvisioningConfig(inboundProvisioningConfig);
-
-        permissionAndRoleConfig = setPermissionsAndRoleConfigObject(serviceProviderDto);
-        serviceProviderObject.setPermissionAndRoleConfig(permissionAndRoleConfig);
-
-        localAndOutBoundAuthenticationConfig = setLocalAndOutboundAuthenticationConfigObject(serviceProviderDto);
-        serviceProviderObject.setLocalAndOutBoundAuthenticationConfig(localAndOutBoundAuthenticationConfig);
+        serviceProviderObject = setClaimConfigObject(serviceProviderObject, serviceProviderDto);
+        serviceProviderObject = setInboundAuthenticationConfigObject(serviceProviderObject, serviceProviderDto);
+        serviceProviderObject = setInboundProvisioningConfigObject(serviceProviderObject, serviceProviderDto);
+        serviceProviderObject = setPermissionsAndRoleConfigObject(serviceProviderObject, serviceProviderDto);
+        serviceProviderObject = setLocalAndOutboundAuthenticationConfigObject(serviceProviderObject,
+                serviceProviderDto);
 
         return serviceProviderObject;
-
     }
 
     /*
     * Set ServiceProviderDto details to a ClaimConfig object
     * */
-    private ClaimConfig setClaimConfigObject(ServiceProviderDto serviceProviderDto) {
+    private ServiceProvider setClaimConfigObject(ServiceProvider serviceProviderObject, ServiceProviderDto
+            serviceProviderDto) {
 
         ClaimConfig claimConfig = new ClaimConfig();
         claimConfig.setAlwaysSendMappedLocalSubjectId(serviceProviderDto.isAlwaysSendMappedLocalSubjectId());
         claimConfig.setLocalClaimDialect(serviceProviderDto.isLocalClaimDialect());
-        return claimConfig;
+        serviceProviderObject.setClaimConfig(claimConfig);
+        return serviceProviderObject;
     }
 
     /*
@@ -88,8 +76,10 @@ public class TransformServiceProviderDto {
     private InboundAuthenticationRequestConfig[] setInboundAuthenticationRequestConfigObject(
             ServiceProviderDto serviceProviderDto) {
 
-        InboundAuthenticationRequestConfig inboundAuthenticationRequestConfig1 = new InboundAuthenticationRequestConfig();
-        InboundAuthenticationRequestConfig inboundAuthenticationRequestConfig2 = new InboundAuthenticationRequestConfig();
+        InboundAuthenticationRequestConfig inboundAuthenticationRequestConfig1 = new
+                InboundAuthenticationRequestConfig();
+        InboundAuthenticationRequestConfig inboundAuthenticationRequestConfig2 = new
+                InboundAuthenticationRequestConfig();
         inboundAuthenticationRequestConfig1.setInboundAuthKey(serviceProviderDto.getApplicationName());
         inboundAuthenticationRequestConfig1.setInboundAuthType("passivests");
 
@@ -105,13 +95,15 @@ public class TransformServiceProviderDto {
     /*
     * Set ServiceProviderDto details to a InboundAuthenticationConfig object
     * */
-    private InboundAuthenticationConfig setInboundAuthenticationConfigObject(ServiceProviderDto serviceProviderDto) {
+    private ServiceProvider setInboundAuthenticationConfigObject(ServiceProvider serviceProviderObject,
+                                                                 ServiceProviderDto serviceProviderDto) {
 
         InboundAuthenticationRequestConfig[] inboundAuthenticationRequestConfig =
                 setInboundAuthenticationRequestConfigObject(serviceProviderDto);
         InboundAuthenticationConfig inboundAuthenticationConfig1 = new InboundAuthenticationConfig();
         inboundAuthenticationConfig1.setInboundAuthenticationRequestConfigs(inboundAuthenticationRequestConfig);
-        return inboundAuthenticationConfig1;
+        serviceProviderObject.setInboundAuthenticationConfig(inboundAuthenticationConfig1);
+        return serviceProviderObject;
     }
 
     /*
@@ -133,23 +125,28 @@ public class TransformServiceProviderDto {
     /*
     * Set ServiceProviderDto details to a PermissionsAndRoleConfig object
     * */
-    private PermissionsAndRoleConfig setPermissionsAndRoleConfigObject(ServiceProviderDto serviceProviderDto) {
+    private ServiceProvider setPermissionsAndRoleConfigObject(ServiceProvider serviceProviderObject,
+                                                              ServiceProviderDto serviceProviderDto) {
         PermissionsAndRoleConfig permissionsAndRoleConfig1 = new PermissionsAndRoleConfig();
         permissionsAndRoleConfig1.setIdpRoles(serviceProviderDto.getIdpRoles());
-        return permissionsAndRoleConfig1;
+        serviceProviderObject.setPermissionAndRoleConfig(permissionsAndRoleConfig1);
+        return serviceProviderObject;
     }
 
     /*
     * Set ServiceProviderDto details to a LocalAndOutboundAuthenticationConfig object
     * */
-    private LocalAndOutboundAuthenticationConfig setLocalAndOutboundAuthenticationConfigObject(
-            ServiceProviderDto serviceProviderDto) {
+    private ServiceProvider setLocalAndOutboundAuthenticationConfigObject(ServiceProvider serviceProviderObject,
+                                                                          ServiceProviderDto serviceProviderDto) {
         AuthenticationStep[] authenticationStep = setAuthenticationStepObject(serviceProviderDto);
 
-        LocalAndOutboundAuthenticationConfig localAndOutboundAuthenticationConfig1 = new LocalAndOutboundAuthenticationConfig();
-        localAndOutboundAuthenticationConfig1.setAuthenticationType(serviceProviderDto.getLocalAuthenticatorConfigsAuthenticationType());
+        LocalAndOutboundAuthenticationConfig localAndOutboundAuthenticationConfig1 = new
+                LocalAndOutboundAuthenticationConfig();
+        localAndOutboundAuthenticationConfig1.setAuthenticationType(serviceProviderDto
+                .getLocalAuthenticatorConfigsAuthenticationType());
         localAndOutboundAuthenticationConfig1.setAuthenticationSteps(authenticationStep);
-        return localAndOutboundAuthenticationConfig1;
+        serviceProviderObject.setLocalAndOutBoundAuthenticationConfig(localAndOutboundAuthenticationConfig1);
+        return serviceProviderObject;
     }
 
     /*
@@ -180,12 +177,14 @@ public class TransformServiceProviderDto {
     /*
     * Set ServiceProviderDto details to a InboundProvisioningConfig object
     * */
-    private InboundProvisioningConfig setInboundProvisioningConfigObject(ServiceProviderDto serviceProviderDto) {
+    private ServiceProvider setInboundProvisioningConfigObject(ServiceProvider serviceProviderObject,
+                                                               ServiceProviderDto serviceProviderDto) {
 
         InboundProvisioningConfig inboundProvisioningConfig1 = new InboundProvisioningConfig();
         inboundProvisioningConfig1.setProvisioningEnabled(serviceProviderDto.isProvisioningEnabled());
         inboundProvisioningConfig1.setProvisioningUserStore(serviceProviderDto.getProvisioningUserStore());
-        return inboundProvisioningConfig1;
+        serviceProviderObject.setInboundProvisioningConfig(inboundProvisioningConfig1);
+        return serviceProviderObject;
     }
 
     /*
@@ -200,12 +199,10 @@ public class TransformServiceProviderDto {
         serviceProviderDto.setSaasApp(serviceProvider.getSaasApp());
         serviceProviderDto = mapClaimConfigObject(serviceProviderDto, serviceProvider);
         serviceProviderDto = mapInboundAuthenticationRequestConfigObject(serviceProviderDto, serviceProvider);
-        serviceProviderDto = mapPropertyObject(serviceProviderDto);
+        serviceProviderDto = mapPropertyObject(serviceProviderDto, serviceProvider);
         serviceProviderDto = mapInboundProvisioningConfigObject(serviceProviderDto, serviceProvider);
         String[] idpRoles = {serviceProvider.getApplicationName()};
         serviceProviderDto.setIdpRoles(idpRoles);
-        serviceProviderDto.setLocalAuthenticatorConfigsAuthenticationType(
-                localAndOutBoundAuthenticationConfig.getAuthenticationType());
         serviceProviderDto = mapLocalAndOutBoundAuthenticationConfigObject(serviceProviderDto, serviceProvider);
 
         return serviceProviderDto;
@@ -214,8 +211,9 @@ public class TransformServiceProviderDto {
     /*
     * Map ClaimConfig object value of ServiceProvider to ServiceProviderDto
     * */
-    private ServiceProviderDto mapClaimConfigObject(ServiceProviderDto serviceProviderDto, ServiceProvider serviceProvider) {
-        claimConfig = serviceProvider.getClaimConfig();
+    private ServiceProviderDto mapClaimConfigObject(ServiceProviderDto serviceProviderDto, ServiceProvider
+            serviceProvider) {
+        ClaimConfig claimConfig = serviceProvider.getClaimConfig();
         serviceProviderDto.setAlwaysSendMappedLocalSubjectId(claimConfig.isAlwaysSendMappedLocalSubjectIdSpecified());
         serviceProviderDto.setLocalClaimDialect(claimConfig.getLocalClaimDialect());
         return serviceProviderDto;
@@ -226,28 +224,33 @@ public class TransformServiceProviderDto {
     * */
     private ServiceProviderDto mapInboundAuthenticationRequestConfigObject(ServiceProviderDto serviceProviderDto,
                                                                            ServiceProvider serviceProvider) {
-        inboundAuthenticationConfig = serviceProvider.getInboundAuthenticationConfig();
+        InboundAuthenticationConfig inboundAuthenticationConfig = serviceProvider.getInboundAuthenticationConfig();
         InboundAuthenticationRequestConfig inboundAuthenticationRequestConfig[];
         inboundAuthenticationRequestConfig = inboundAuthenticationConfig.getInboundAuthenticationRequestConfigs();
-        serviceProviderDto.setInboundAuthKey(inboundAuthenticationRequestConfig[1].getInboundAuthKey());
-        serviceProviderDto.setInboundAuthType(inboundAuthenticationRequestConfig[1].getInboundAuthType());
+        serviceProviderDto.setInboundAuthKey(inboundAuthenticationRequestConfig[0].getInboundAuthKey());
+        serviceProviderDto.setInboundAuthType(inboundAuthenticationRequestConfig[0].getInboundAuthType());
         return serviceProviderDto;
     }
 
     /*
     * Map Property object value of ServiceProvider to ServiceProviderDto
     * */
-    private ServiceProviderDto mapPropertyObject(ServiceProviderDto serviceProviderDto) {
+    private ServiceProviderDto mapPropertyObject(ServiceProviderDto serviceProviderDto, ServiceProvider
+            serviceProvider) {
         InboundAuthenticationRequestConfig inboundAuthenticationRequestConfig[];
         Property[] property;
+
+
+        InboundAuthenticationConfig inboundAuthenticationConfig = serviceProvider.getInboundAuthenticationConfig();
         inboundAuthenticationRequestConfig = inboundAuthenticationConfig.getInboundAuthenticationRequestConfigs();
-        property = inboundAuthenticationRequestConfig[1].getProperties();
+        property = inboundAuthenticationRequestConfig[0].getProperties();
         serviceProviderDto.setConfidential(property[0].getConfidential());
         serviceProviderDto.setDefaultValue(property[0].getDefaultValue());
         serviceProviderDto.setPropertyName(property[0].getName());
         serviceProviderDto.setPropertyValue(property[0].getValue());
         serviceProviderDto.setPropertyRequired(property[0].getRequired());
         return serviceProviderDto;
+
     }
 
     /*
@@ -255,7 +258,7 @@ public class TransformServiceProviderDto {
     * */
     private ServiceProviderDto mapInboundProvisioningConfigObject(ServiceProviderDto serviceProviderDto,
                                                                   ServiceProvider serviceProvider) {
-        inboundProvisioningConfig = serviceProvider.getInboundProvisioningConfig();
+        InboundProvisioningConfig inboundProvisioningConfig = serviceProvider.getInboundProvisioningConfig();
         serviceProviderDto.setProvisioningEnabled(inboundProvisioningConfig.getProvisioningEnabled());
         serviceProviderDto.setProvisioningUserStore(inboundProvisioningConfig.getProvisioningUserStore());
         return serviceProviderDto;
@@ -268,13 +271,16 @@ public class TransformServiceProviderDto {
                                                                              ServiceProvider serviceProvider) {
         AuthenticationStep authenticationStep[];
         LocalAuthenticatorConfig localAuthenticatorConfig[];
-        localAndOutBoundAuthenticationConfig = serviceProvider.getLocalAndOutBoundAuthenticationConfig();
+        LocalAndOutboundAuthenticationConfig localAndOutBoundAuthenticationConfig = serviceProvider
+                .getLocalAndOutBoundAuthenticationConfig();
         authenticationStep = localAndOutBoundAuthenticationConfig.getAuthenticationSteps();
         localAuthenticatorConfig = authenticationStep[0].getLocalAuthenticatorConfigs();
         serviceProviderDto.setLocalAuthenticatorConfigsDisplayName(localAuthenticatorConfig[0].getDisplayName());
         serviceProviderDto.setLocalAuthenticatorConfigsEnabled(localAuthenticatorConfig[0].getEnabled());
         serviceProviderDto.setLocalAuthenticatorConfigsName(localAuthenticatorConfig[0].getName());
         serviceProviderDto.setLocalAuthenticatorConfigsValid(localAuthenticatorConfig[0].getValid());
+        serviceProviderDto.setLocalAuthenticatorConfigsAuthenticationType(
+                localAndOutBoundAuthenticationConfig.getAuthenticationType());
         return serviceProviderDto;
     }
 }

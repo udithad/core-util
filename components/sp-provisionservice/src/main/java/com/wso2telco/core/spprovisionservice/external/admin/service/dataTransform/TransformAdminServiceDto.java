@@ -24,6 +24,7 @@ import org.wso2.carbon.identity.oauth.stub.dto.OAuthConsumerAppDTO;
 public class TransformAdminServiceDto {
 
     OAuthConsumerAppDTO oAuthConsumerAppDto = null;
+    AdminServiceDto adminServiceDto = null;
 
     public OAuthConsumerAppDTO transformToOAuthConsumerAppDto(AdminServiceDto adminServiceDto) {
 
@@ -33,10 +34,36 @@ public class TransformAdminServiceDto {
         oAuthConsumerAppDto.setCallbackUrl(adminServiceDto.getCallbackUrl());
         oAuthConsumerAppDto.setGrantTypes(adminServiceDto.getGrantTypes());
         oAuthConsumerAppDto.setOauthConsumerKey(adminServiceDto.getOauthConsumerKey());
-        oAuthConsumerAppDto.setOauthConsumerSecret(adminServiceDto.getOauthConsumerSecret());
+
+        if (adminServiceDto.getOauthConsumerSecret() != null) {
+            oAuthConsumerAppDto.setOauthConsumerSecret(adminServiceDto.getOauthConsumerSecret());
+        } else {
+            oAuthConsumerAppDto.setOauthConsumerSecret(randomSecretKeyGenerator().toString());
+        }
         oAuthConsumerAppDto.setPkceMandatory(adminServiceDto.isPkceMandatory());
         oAuthConsumerAppDto.setPkceSupportPlain(adminServiceDto.isPkceSupportPlain());
 
         return oAuthConsumerAppDto;
+    }
+
+    public AdminServiceDto transformToAdminServiceDto(OAuthConsumerAppDTO oAuthConsumerAppDTO) {
+
+        adminServiceDto = new AdminServiceDto();
+        adminServiceDto.setApplicationName(oAuthConsumerAppDTO.getApplicationName());
+        adminServiceDto.setOauthVersion(oAuthConsumerAppDTO.getOAuthVersion());
+        adminServiceDto.setCallbackUrl(oAuthConsumerAppDTO.getCallbackUrl());
+        adminServiceDto.setGrantTypes(oAuthConsumerAppDTO.getGrantTypes());
+        adminServiceDto.setOauthConsumerKey(oAuthConsumerAppDTO.getOauthConsumerKey());
+        adminServiceDto.setOauthConsumerSecret(oAuthConsumerAppDTO.getOauthConsumerSecret());
+        adminServiceDto.setPkceMandatory(oAuthConsumerAppDTO.getPkceMandatory());
+        adminServiceDto.setPkceSupportPlain(oAuthConsumerAppDTO.getPkceSupportPlain());
+
+        return adminServiceDto;
+
+    }
+
+    public Long randomSecretKeyGenerator() {
+        long number = (long) Math.floor(Math.random() * 9_000_000_000L) + 1_000_000_000L;
+        return number;
     }
 }

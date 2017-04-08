@@ -24,7 +24,8 @@ import org.apache.commons.pool.impl.GenericObjectPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wso2.carbon.identity.application.common.model.xsd.ServiceProvider;
-import org.wso2.carbon.identity.application.mgt.stub.IdentityApplicationManagementServiceIdentityApplicationManagementException;
+import org.wso2.carbon.identity.application.mgt.stub
+        .IdentityApplicationManagementServiceIdentityApplicationManagementException;
 import org.wso2.carbon.identity.application.mgt.stub.IdentityApplicationManagementServiceStub;
 
 import java.rmi.RemoteException;
@@ -55,7 +56,8 @@ public class ApplicationManagementServiceClient {
             identityApplicationManagementServiceStub = (IdentityApplicationManagementServiceStub) stub;
 
             if (cookie != null) {
-                identityApplicationManagementServiceStub._getServiceClient().getOptions().setProperty(HTTPConstants.COOKIE_STRING,
+                identityApplicationManagementServiceStub._getServiceClient().getOptions().setProperty(HTTPConstants
+                                .COOKIE_STRING,
                         cookie);
             }
 
@@ -87,7 +89,8 @@ public class ApplicationManagementServiceClient {
     public void createSpApplication(ServiceProviderDto serviceProviderDto) throws SpProvisionServiceException {
 
         transformServiceProviderDto = new TransformServiceProviderDto();
-        ServiceProvider application = transformServiceProviderDto.transformToServiceProviderToCreateApplication(serviceProviderDto);
+        ServiceProvider application = transformServiceProviderDto.transformToServiceProviderToCreateApplication
+                (serviceProviderDto);
         try {
             identityApplicationManagementServiceStub.createApplication(application);
         } catch (RemoteException e) {
@@ -103,7 +106,8 @@ public class ApplicationManagementServiceClient {
     public void updateSpApplication(ServiceProviderDto serviceProviderDto) throws SpProvisionServiceException {
 
         transformServiceProviderDto = new TransformServiceProviderDto();
-        ServiceProvider serviceProvider = transformServiceProviderDto.transformToServiceProviderToUpdateApplication(getSpApplicationData(serviceProviderDto.getApplicationName()), serviceProviderDto);
+        ServiceProvider serviceProvider = transformServiceProviderDto.transformToServiceProviderToUpdateApplication
+                (getSpApplicationData(serviceProviderDto.getApplicationName()), serviceProviderDto);
         try {
             identityApplicationManagementServiceStub.updateApplication(serviceProvider);
         } catch (RemoteException e) {

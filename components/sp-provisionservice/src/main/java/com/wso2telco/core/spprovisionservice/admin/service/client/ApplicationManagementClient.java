@@ -28,8 +28,10 @@ import org.apache.axis2.client.ServiceClient;
 import org.apache.axis2.transport.http.HttpTransportProperties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.identity.application.common.model.xsd.ApplicationBasicInfo;
 import org.wso2.carbon.identity.application.common.model.xsd.ServiceProvider;
-import org.wso2.carbon.identity.application.mgt.stub.IdentityApplicationManagementServiceIdentityApplicationManagementException;
+import org.wso2.carbon.identity.application.mgt.stub
+        .IdentityApplicationManagementServiceIdentityApplicationManagementException;
 import org.wso2.carbon.identity.application.mgt.stub.IdentityApplicationManagementServiceStub;
 
 import java.rmi.RemoteException;
@@ -63,19 +65,46 @@ public class ApplicationManagementClient {
 
     public ServiceProvider getSpApplicationData(String applicationName) throws SpProvisionServiceException {
 
-        ServiceProvider serviceProvider;
+        ServiceProvider serviceProvider = null;
         authenticate(client);
+        ApplicationBasicInfo[] applicationBasicInfo;
+
         try {
-            serviceProvider = stub.getApplication(applicationName);
+
+            applicationBasicInfo = getAllApplicationBasicInfo();
+
+            for (ApplicationBasicInfo appInfo : applicationBasicInfo) {
+                if (appInfo.getApplicationName().equals(applicationName)) {
+                    serviceProvider = stub.getApplication(applicationName);
+                    break;
+                }
+            }
         } catch (RemoteException e) {
             throw new SpProvisionServiceException(e.getMessage());
         } catch (IdentityApplicationManagementServiceIdentityApplicationManagementException e) {
             throw new SpProvisionServiceException(e.getMessage());
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             throw new SpProvisionServiceException(e.getMessage());
         }
         return serviceProvider;
     }
+
+    private ApplicationBasicInfo[] getAllApplicationBasicInfo() throws SpProvisionServiceException {
+
+        ApplicationBasicInfo[] applicationBasicInfo = null;
+        authenticate(client);
+        try {
+            applicationBasicInfo = stub.getAllApplicationBasicInfo();
+        } catch (RemoteException e) {
+            throw new SpProvisionServiceException(e.getMessage());
+        } catch (IdentityApplicationManagementServiceIdentityApplicationManagementException e) {
+            throw new SpProvisionServiceException(e.getMessage());
+        }
+
+        return applicationBasicInfo;
+
+    }
+
 
     public void createSpApplication(ServiceProviderDto serviceProviderDto) throws SpProvisionServiceException {
 
@@ -83,7 +112,8 @@ public class ApplicationManagementClient {
 
         if (serviceProviderDto != null) {
             transformServiceProviderDto = new TransformServiceProviderDto();
-            ServiceProvider serviceProvider = transformServiceProviderDto.transformToServiceProviderToCreateApplication(serviceProviderDto);
+            ServiceProvider serviceProvider = transformServiceProviderDto
+                    .transformToServiceProviderToCreateApplication(serviceProviderDto);
             try {
                 stub.createApplication(serviceProvider);
             } catch (RemoteException e) {
@@ -105,7 +135,9 @@ public class ApplicationManagementClient {
         if (serviceProviderDto != null) {
             transformServiceProviderDto = new TransformServiceProviderDto();
 
-            ServiceProvider serviceProvider = transformServiceProviderDto.transformToServiceProviderToUpdateApplication(getSpApplicationData(serviceProviderDto.getApplicationName()), serviceProviderDto);
+            ServiceProvider serviceProvider = transformServiceProviderDto
+                    .transformToServiceProviderToUpdateApplication(getSpApplicationData(serviceProviderDto
+                            .getApplicationName()), serviceProviderDto);
             try {
                 stub.updateApplication(serviceProvider);
             } catch (RemoteException e) {

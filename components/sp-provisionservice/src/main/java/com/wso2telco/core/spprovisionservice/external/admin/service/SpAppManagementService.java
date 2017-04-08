@@ -29,4 +29,6 @@ public interface SpAppManagementService {
 
     void deleteSpApplication(String applicationName) throws SpProvisionServiceException;
 
+    ServiceProviderDto getServiceProviderDetails(String applicationName) throws SpProvisionServiceException;
+
 }

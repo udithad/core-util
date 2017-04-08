@@ -17,6 +17,7 @@ package com.wso2telco.core.spprovisionservice.external.admin.service.impl;
 
 import com.wso2telco.core.spprovisionservice.admin.service.client.ApplicationManagementClient;
 import com.wso2telco.core.spprovisionservice.external.admin.service.SpAppManagementService;
+import com.wso2telco.core.spprovisionservice.external.admin.service.dataTransform.TransformServiceProviderDto;
 import com.wso2telco.core.spprovisionservice.sp.entity.ServiceProviderDto;
 import com.wso2telco.core.spprovisionservice.sp.exception.SpProvisionServiceException;
 import org.apache.commons.logging.Log;
@@ -35,23 +36,23 @@ public class SpAppManagementServiceImpl implements SpAppManagementService {
     @Override
     public boolean createSpApplication(ServiceProviderDto serviceProviderDto) throws SpProvisionServiceException {
 
-        boolean success =  true;
+        boolean success = true;
         boolean failure = false;
         boolean status;
 
-//        if((serviceProviderDto != null) && (getSpApplicationData(serviceProviderDto.getApplicationName())) == null){
+        if ((serviceProviderDto != null) && (getSpApplicationData(serviceProviderDto.getApplicationName())) == null) {
 
-        if(serviceProviderDto != null){
             try {
                 applicationManagementServiceClient.createSpApplication(serviceProviderDto);
                 status = success;
             } catch (SpProvisionServiceException e) {
                 log.error("Error occurred in remove create Service Provider Application " + e.getMessage());
                 throw new SpProvisionServiceException(e.getMessage());
+            } catch (NullPointerException e) {
+                log.error("Service Provider is not already available in the database " + e.getMessage());
+                throw new SpProvisionServiceException(e.getMessage());
             }
-        }
-        else
-        {
+        } else {
             log.error("Service provider details are null");
             status = failure;
         }
@@ -62,7 +63,8 @@ public class SpAppManagementServiceImpl implements SpAppManagementService {
     public void updateSpApplication(ServiceProviderDto serviceProviderDto) throws SpProvisionServiceException {
 
         try {
-            ServiceProvider serviceProvider = applicationManagementServiceClient.getSpApplicationData(serviceProviderDto.getApplicationName());
+            ServiceProvider serviceProvider = applicationManagementServiceClient.getSpApplicationData
+                    (serviceProviderDto.getApplicationName());
             serviceProviderDto.setApplicationId(serviceProvider.getApplicationID());
             applicationManagementServiceClient.updateSpApplication(serviceProviderDto);
         } catch (SpProvisionServiceException e) {
@@ -94,6 +96,24 @@ public class SpAppManagementServiceImpl implements SpAppManagementService {
             log.error("Error occurred in deleting application data" + e.getMessage());
             throw new SpProvisionServiceException(e.getMessage());
         }
+    }
+
+    @Override
+    public ServiceProviderDto getServiceProviderDetails(String applicationName) throws SpProvisionServiceException {
+
+        ServiceProviderDto serviceProviderDto;
+        ServiceProvider serviceProvider;
+        TransformServiceProviderDto transformServiceProviderDto = new TransformServiceProviderDto();
+
+        try {
+            serviceProvider = applicationManagementServiceClient.getSpApplicationData(applicationName);
+            serviceProviderDto = transformServiceProviderDto.transformToServiceProviderDto(serviceProvider);
+        } catch (SpProvisionServiceException e) {
+            log.error("Error occurred in getting Service Provider data" + e.getMessage());
+            throw new SpProvisionServiceException(e.getMessage());
+        }
+        return serviceProviderDto;
+
     }
 
 }

@@ -62,21 +62,23 @@ public class OauthAdminClient {
     }
 
     /*
-    * Get Service Provider Application Details
-    * */
-    public OAuthConsumerAppDTO getOauthApplicationDataByAppName(String appName) throws SpProvisionServiceException {
+* Get Service Provider Application Details using consumerKey
+* */
+    public OAuthConsumerAppDTO getOauthApplicationDataByConsumerKey(String consumerKey) throws
+            SpProvisionServiceException {
 
         OAuthConsumerAppDTO apps = null;
+        OAuthConsumerAppDTO[] allAppDetails;
+
         authenticate(client);
 
-        try {
-            apps = oAuthAdminServiceStub.getOAuthApplicationDataByAppName(appName);
-        } catch (RemoteException e) {
-            throw new SpProvisionServiceException(e.getMessage());
-        } catch (OAuthAdminServiceException e) {
-            throw new SpProvisionServiceException(e.getMessage());
-        } catch (NullPointerException e) {
-            return apps;
+        allAppDetails = getAllOAuthApplicationData();
+
+        for (OAuthConsumerAppDTO oAuthConsumerAppDTO : allAppDetails) {
+            if (oAuthConsumerAppDTO.getOauthConsumerKey().equals(consumerKey)) {
+                apps = oAuthConsumerAppDTO;
+                break;
+            }
         }
         return apps;
     }
@@ -130,6 +132,24 @@ public class OauthAdminClient {
         } catch (OAuthAdminServiceException e) {
             throw new SpProvisionServiceException(e.getMessage());
         }
+    }
+
+    /*
+    * Get all Oauth application details
+    * */
+    private OAuthConsumerAppDTO[] getAllOAuthApplicationData() throws SpProvisionServiceException {
+
+        OAuthConsumerAppDTO[] allAppDetails;
+        authenticate(client);
+
+        try {
+            allAppDetails = oAuthAdminServiceStub.getAllOAuthApplicationData();
+        } catch (RemoteException e) {
+            throw new SpProvisionServiceException(e.getMessage());
+        } catch (OAuthAdminServiceException e) {
+            throw new SpProvisionServiceException(e.getMessage());
+        }
+        return allAppDetails;
     }
 
     public void authenticate(ServiceClient client) {

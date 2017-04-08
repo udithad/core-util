@@ -26,7 +26,7 @@ public class AdministrationServiceConfig {
     private String password;
     private String adminServicesHostUrl;
     private String applicationManagementHostUrl;
-    private MobileConnectConfig mobileConnectConfig ;
+    private MobileConnectConfig mobileConnectConfig;
     private ConfigurationService configurationService = new ConfigurationServiceImpl();
 
     /**

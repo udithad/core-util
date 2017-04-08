@@ -17,6 +17,7 @@ package com.wso2telco.core.spprovisionservice.external.admin.service.impl;
 
 import com.wso2telco.core.spprovisionservice.admin.service.client.OauthAdminClient;
 import com.wso2telco.core.spprovisionservice.external.admin.service.OauthAdminService;
+import com.wso2telco.core.spprovisionservice.external.admin.service.dataTransform.TransformAdminServiceDto;
 import com.wso2telco.core.spprovisionservice.sp.entity.AdminServiceDto;
 import com.wso2telco.core.spprovisionservice.sp.exception.SpProvisionServiceException;
 import org.apache.commons.logging.Log;
@@ -42,56 +43,65 @@ public class OauthAdminServiceImpl implements OauthAdminService {
     }
 
     @Override
-    public boolean registerOAuthApplicationData(AdminServiceDto adminServiceDto) {
+    public boolean registerOAuthApplicationData(AdminServiceDto adminServiceDto) throws SpProvisionServiceException {
 
-        boolean success =true;
+        boolean success = true;
         boolean failure = false;
-        boolean status = false;
+        boolean status;
 
-        if(adminServiceDto != null){
+        if (adminServiceDto != null) {
             oauthAdminServiceClient = new OauthAdminClient();
-           try {
-//                oAuthConsumerAppDTO = oauthAdminServiceClient.getOauthApplicationDataByAppName(adminServiceDto.getApplicationName());
-//                if (oAuthConsumerAppDTO != null) {
-//                    if ((oAuthConsumerAppDTO.getOauthConsumerKey().equals(adminServiceDto.getOauthConsumerKey()))) {
-//
-//                        if(adminServiceDto.getOauthConsumerSecret()!= null && (oAuthConsumerAppDTO.getOauthConsumerSecret().equals(adminServiceDto.getOauthConsumerSecret()))){
-//                            log.info("The Service Provider OAuth details are already available in the database");
-//                            status = failure;
-//                        }
-//                        else if(adminServiceDto.getOauthConsumerSecret()!= null && !(oAuthConsumerAppDTO.getOauthConsumerSecret().equals(adminServiceDto.getOauthConsumerSecret()))){
-//                            removeOAuthApplicationData(oAuthConsumerAppDTO.getOauthConsumerKey());
-//                            registerOAuthApplicationData(adminServiceDto);
-//                            status = success;
-//                        }
-//                        else if(adminServiceDto.getOauthConsumerSecret() == null){
-//                            removeOAuthApplicationData(oAuthConsumerAppDTO.getOauthConsumerKey());
-//                            registerOAuthApplicationData(adminServiceDto);
-//                            status = success;
-//                        }
-//
-//                        }else{
-//                        log.info("The Service Provider OAuth details are mismatch for given Service Provider");
-//                        status = failure;
-//                    }
-//                    }
-//                } catch (SpProvisionServiceException e) {
-//                   log.info("Exception occurred in register Oauthdata for Service Provider "+e.getMessage());
-//                   status =failure;
-//            }
-//            }
-//        else {
-//            try {
 
-                oauthAdminServiceClient.registerOauthApplicationData(adminServiceDto);
+            try {
+                oAuthConsumerAppDTO = oauthAdminServiceClient.getOauthApplicationDataByConsumerKey(adminServiceDto
+                        .getOauthConsumerKey());
 
-//                status = success;
-         }
-            catch (SpProvisionServiceException e) {
-                log.info("Exception occurred in register Oauthdata for Service Provider "+e.getMessage());
-                status =failure;
+                if (oAuthConsumerAppDTO != null) {
+
+                    if (adminServiceDto.getOauthConsumerSecret() != null) {
+                        if (oAuthConsumerAppDTO.getOauthConsumerSecret().equals(adminServiceDto
+                                .getOauthConsumerSecret())) {
+                            log.info("The Service Provider OAuth details are already available in the database");
+                            status = failure;
+                        } else {
+                            removeOAuthApplicationData(oAuthConsumerAppDTO.getOauthConsumerKey());
+                            registerOAuthApplicationData(adminServiceDto);
+                            status = success;
+                        }
+                    } else {
+                        log.info("The Service Provider OAuth details are already available in the database");
+                        status = failure;
+                    }
+                } else {
+                    oauthAdminServiceClient.registerOauthApplicationData(adminServiceDto);
+                    status = success;
+                }
+            } catch (SpProvisionServiceException e) {
+                log.error("Error occurred in registering the oAuth data");
+                throw new SpProvisionServiceException(e.getMessage());
             }
+        } else {
+            log.info("Admin Service Dto is null.Can't proceed Service Provider provisioning");
+            status = failure;
         }
         return status;
+    }
+
+    @Override
+    public AdminServiceDto getOauthServiceProviderData(String consumerKey) throws SpProvisionServiceException {
+
+        OAuthConsumerAppDTO oAuthConsumerAppDTO;
+        oauthAdminServiceClient = new OauthAdminClient();
+        AdminServiceDto adminServiceDto;
+        TransformAdminServiceDto transformAdminServiceDto = new TransformAdminServiceDto();
+
+        try {
+            oAuthConsumerAppDTO = oauthAdminServiceClient.getOauthApplicationDataByConsumerKey(consumerKey);
+            adminServiceDto = transformAdminServiceDto.transformToAdminServiceDto(oAuthConsumerAppDTO);
+        } catch (SpProvisionServiceException e) {
+            log.error("Error while getting Oauth details of the service provider for the given consumer key");
+            throw new SpProvisionServiceException(e.getMessage());
         }
+        return adminServiceDto;
+    }
 }

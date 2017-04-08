@@ -24,4 +24,6 @@ public interface OauthAdminService {
 
     boolean registerOAuthApplicationData(AdminServiceDto adminServiceDto) throws SpProvisionServiceException;
 
+    AdminServiceDto getOauthServiceProviderData(String consumerKey) throws SpProvisionServiceException;
+
 }
