@@ -54,8 +54,9 @@ public class OauthAdminClient {
         try {
             oAuthAdminServiceStub = new OAuthAdminServiceStub(null,
                     config.getAdminServicesHostUrl());
-
+            oAuthAdminServiceStub._getServiceClient().getOptions().setTimeOutInMilliSeconds(2*1000*60);
             client = oAuthAdminServiceStub._getServiceClient();
+           
         } catch (AxisFault axisFault) {
             axisFault.printStackTrace();
         }
