@@ -52,21 +52,20 @@ public class OauthAdminClient {
     public void createAndAuthenticateStub() {
         config = new AdministrationServiceConfig();
         try {
-            oAuthAdminServiceStub = new OAuthAdminServiceStub(null,
-                    config.getAdminServicesHostUrl());
-            oAuthAdminServiceStub._getServiceClient().getOptions().setTimeOutInMilliSeconds(2*1000*60);
+            oAuthAdminServiceStub = new OAuthAdminServiceStub(null, config.getAdminServicesHostUrl());
+            oAuthAdminServiceStub._getServiceClient().getOptions().setTimeOutInMilliSeconds(2 * 1000 * 60);
             client = oAuthAdminServiceStub._getServiceClient();
-           
+
         } catch (AxisFault axisFault) {
             axisFault.printStackTrace();
         }
     }
 
     /*
-* Get Service Provider Application Details using consumerKey
-* */
-    public OAuthConsumerAppDTO getOauthApplicationDataByConsumerKey(String consumerKey) throws
-            SpProvisionServiceException {
+     * Get Service Provider Application Details using consumerKey
+     */
+    public OAuthConsumerAppDTO getOauthApplicationDataByConsumerKey(String consumerKey)
+            throws SpProvisionServiceException {
 
         OAuthConsumerAppDTO apps = null;
         OAuthConsumerAppDTO[] allAppDetails;
@@ -85,8 +84,8 @@ public class OauthAdminClient {
     }
 
     /*
-   * Register OAuthApplication Data
-   * */
+     * Register OAuthApplication Data
+     */
     public void registerOauthApplicationData(AdminServiceDto adminServiceDto) throws SpProvisionServiceException {
 
         transformAdminServiceDto = new TransformAdminServiceDto();
@@ -101,9 +100,33 @@ public class OauthAdminClient {
         }
     }
 
+    public void registerOauthApplicationData(OAuthConsumerAppDTO app, AdminServiceDto adminServiceDto)
+            throws SpProvisionServiceException {
+        authenticate(client);
+        try {
+            OAuthConsumerAppDTO appDto = transformAdminServiceDto.transformToOAuthConsumerAppDto(adminServiceDto);
+            oAuthAdminServiceStub.registerOAuthApplicationData(appDto);
+        } catch (RemoteException e) {
+            throw new SpProvisionServiceException(e.getMessage());
+        } catch (OAuthAdminServiceException e) {
+            throw new SpProvisionServiceException(e.getMessage());
+        }
+    }
+
+    public void registerOauthApplicationData(OAuthConsumerAppDTO app) throws SpProvisionServiceException {
+        authenticate(client);
+        try {
+            oAuthAdminServiceStub.registerOAuthApplicationData(app);
+        } catch (RemoteException e) {
+            throw new SpProvisionServiceException(e.getMessage());
+        } catch (OAuthAdminServiceException e) {
+            throw new SpProvisionServiceException(e.getMessage());
+        }
+    }
+
     /*
-    * removeOAuthApplicationData method
-    * */
+     * removeOAuthApplicationData method
+     */
     public void removeOauthApplicationData(String consumerKey) throws SpProvisionServiceException {
 
         authenticate(client);
@@ -117,8 +140,8 @@ public class OauthAdminClient {
     }
 
     /*
-   * Update OAuthConfigurations
-   * */
+     * Update OAuthConfigurations
+     */
     public void updateOauthApplicationData(AdminServiceDto adminServiceDto) throws SpProvisionServiceException {
 
         OAuthConsumerAppDTO oAuthConsumerAppDTO = null;
@@ -136,8 +159,8 @@ public class OauthAdminClient {
     }
 
     /*
-    * Get all Oauth application details
-    * */
+     * Get all Oauth application details
+     */
     private OAuthConsumerAppDTO[] getAllOAuthApplicationData() throws SpProvisionServiceException {
 
         OAuthConsumerAppDTO[] allAppDetails;

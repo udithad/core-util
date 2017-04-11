@@ -53,19 +53,22 @@ public class OauthAdminServiceImpl implements OauthAdminService {
             oauthAdminServiceClient = new OauthAdminClient();
 
             try {
-                oAuthConsumerAppDTO = oauthAdminServiceClient.getOauthApplicationDataByConsumerKey(adminServiceDto
-                        .getOauthConsumerKey());
+                oAuthConsumerAppDTO = oauthAdminServiceClient
+                        .getOauthApplicationDataByConsumerKey(adminServiceDto.getOauthConsumerKey());
 
                 if (oAuthConsumerAppDTO != null) {
 
                     if (adminServiceDto.getOauthConsumerSecret() != null) {
-                        if (oAuthConsumerAppDTO.getOauthConsumerSecret().equals(adminServiceDto
-                                .getOauthConsumerSecret())) {
+                        if (oAuthConsumerAppDTO.getOauthConsumerSecret()
+                                .equals(adminServiceDto.getOauthConsumerSecret())) {
                             log.info("The Service Provider OAuth details are already available in the database");
                             status = failure;
                         } else {
-                            removeOAuthApplicationData(oAuthConsumerAppDTO.getOauthConsumerKey());
-                            registerOAuthApplicationData(adminServiceDto);
+                            TransformAdminServiceDto transformAdminServiceDto = new TransformAdminServiceDto();
+                            AdminServiceDto adminSerDto = transformAdminServiceDto.transformToOAuthConsumerAppDto(adminServiceDto, oAuthConsumerAppDTO);
+                            OAuthConsumerAppDTO appDto = transformAdminServiceDto.transformToOAuthConsumerAppDto(adminSerDto);
+                            oauthAdminServiceClient.removeOauthApplicationData(adminServiceDto.getOauthConsumerKey());
+                            oauthAdminServiceClient.registerOauthApplicationData(appDto);
                             status = success;
                         }
                     } else {

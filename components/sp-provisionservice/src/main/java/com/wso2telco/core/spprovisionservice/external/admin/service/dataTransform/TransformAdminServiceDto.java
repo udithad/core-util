@@ -45,6 +45,27 @@ public class TransformAdminServiceDto {
 
         return oAuthConsumerAppDto;
     }
+    
+    public AdminServiceDto transformToOAuthConsumerAppDto(AdminServiceDto adminServiceDto,OAuthConsumerAppDTO appDTO) {
+
+        AdminServiceDto oAuthConsumerAppDto = new AdminServiceDto();
+        oAuthConsumerAppDto.setApplicationName(appDTO.getApplicationName());
+        oAuthConsumerAppDto.setOauthVersion(appDTO.getOAuthVersion());
+        oAuthConsumerAppDto.setCallbackUrl(appDTO.getCallbackUrl());
+        oAuthConsumerAppDto.setGrantTypes(appDTO.getGrantTypes());
+        oAuthConsumerAppDto.setOauthConsumerKey(appDTO.getOauthConsumerKey());
+
+        if (adminServiceDto.getOauthConsumerSecret() != null) {
+            oAuthConsumerAppDto.setOauthConsumerSecret(adminServiceDto.getOauthConsumerSecret());
+        } else {
+            oAuthConsumerAppDto.setOauthConsumerSecret(randomSecretKeyGenerator().toString());
+        }
+        oAuthConsumerAppDto.setPkceMandatory(adminServiceDto.isPkceMandatory());
+        oAuthConsumerAppDto.setPkceSupportPlain(adminServiceDto.isPkceSupportPlain());
+
+        return oAuthConsumerAppDto;
+    }
+
 
     public AdminServiceDto transformToAdminServiceDto(OAuthConsumerAppDTO oAuthConsumerAppDTO) {
 
