@@ -15,15 +15,25 @@
  ******************************************************************************/
 package com.wso2telco.core.spprovisionservice.external.admin.service;
 
+import org.wso2.carbon.identity.oauth.stub.dto.OAuthConsumerAppDTO;
+
 import com.wso2telco.core.spprovisionservice.sp.entity.AdminServiceDto;
 import com.wso2telco.core.spprovisionservice.sp.exception.SpProvisionServiceException;
 
 public interface OauthAdminService {
 
-    void removeOAuthApplicationData(String consumerKey) throws SpProvisionServiceException;
+    public void removeOAuthApplicationData(String consumerKey) throws SpProvisionServiceException;
 
-    boolean registerOAuthApplicationData(AdminServiceDto adminServiceDto) throws SpProvisionServiceException;
+    public boolean registerOAuthApplicationData(AdminServiceDto adminServiceDto) throws SpProvisionServiceException;
 
-    AdminServiceDto getOauthServiceProviderData(String consumerKey) throws SpProvisionServiceException;
+    public AdminServiceDto getOauthServiceProviderData(String consumerKey) throws SpProvisionServiceException;
 
+    public boolean rebuildOAuthApplicationData(AdminServiceDto adminServiceDto, OAuthConsumerAppDTO oAuthConsumerAppDTO)
+            throws SpProvisionServiceException;
+
+    public OAuthConsumerAppDTO getOAuthApplicationData(AdminServiceDto adminServiceDto)
+            throws SpProvisionServiceException;
+    
+    public boolean isCredentailsEquals(AdminServiceDto adminServiceDto, OAuthConsumerAppDTO oAuthConsumerAppDTO)
+            throws SpProvisionServiceException;
 }
