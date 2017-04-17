@@ -15,11 +15,8 @@
  ******************************************************************************/
 package com.wso2telco.core.spprovisionservice.admin.service.client;
 
-import com.wso2telco.core.config.model.MobileConnectConfig;
-import com.wso2telco.core.config.service.ConfigurationService;
-import com.wso2telco.core.config.service.ConfigurationServiceImpl;
-import com.wso2telco.core.spprovisionservice.admin.config.AdministrationServiceConfig;
 import com.wso2telco.core.spprovisionservice.external.admin.service.dataTransform.TransformAdminServiceDto;
+import com.wso2telco.core.spprovisionservice.sp.entity.AdminServiceConfig;
 import com.wso2telco.core.spprovisionservice.sp.entity.AdminServiceDto;
 import com.wso2telco.core.spprovisionservice.sp.exception.SpProvisionServiceException;
 import org.apache.axis2.AxisFault;
@@ -36,28 +33,25 @@ import java.rmi.RemoteException;
 
 public class OauthAdminClient {
 
-    private AdministrationServiceConfig config;
     private static final Logger log = LoggerFactory.getLogger(OauthAdminClient.class);
     private TransformAdminServiceDto transformAdminServiceDto = null;
     private OAuthAdminServiceStub oAuthAdminServiceStub = null;
     private ServiceClient client = null;
-    private MobileConnectConfig mobileConnectConfig;
-    private ConfigurationService configurationService = new ConfigurationServiceImpl();
+    private AdminServiceConfig adminServiceConfig = null;
 
-    public OauthAdminClient() {
-        mobileConnectConfig = configurationService.getDataHolder().getMobileConnectConfig();
+    public OauthAdminClient(AdminServiceConfig adminServiceConfig) {
+        this.adminServiceConfig = adminServiceConfig;
         createAndAuthenticateStub();
     }
 
     public void createAndAuthenticateStub() {
-        config = new AdministrationServiceConfig();
         try {
-            oAuthAdminServiceStub = new OAuthAdminServiceStub(null, config.getAdminServicesHostUrl());
+            oAuthAdminServiceStub = new OAuthAdminServiceStub(null, adminServiceConfig.getAdminServiceUrl());
             oAuthAdminServiceStub._getServiceClient().getOptions().setTimeOutInMilliSeconds(2 * 1000 * 60);
             client = oAuthAdminServiceStub._getServiceClient();
 
-        } catch (AxisFault axisFault) {
-            axisFault.printStackTrace();
+        } catch (AxisFault e) {
+            log.error(e.getMessage());
         }
     }
 
@@ -179,8 +173,8 @@ public class OauthAdminClient {
     public void authenticate(ServiceClient client) {
         Options option = client.getOptions();
         HttpTransportProperties.Authenticator auth = new HttpTransportProperties.Authenticator();
-        auth.setUsername(mobileConnectConfig.getSpProvisionConfig().getStubAccessUserName());
-        auth.setPassword(mobileConnectConfig.getSpProvisionConfig().getStubAccessPassword());
+        auth.setUsername(adminServiceConfig.getStubAccessUserName());
+        auth.setPassword(adminServiceConfig.getStubAccessPassword());
         auth.setPreemptiveAuthentication(true);
         option.setProperty(org.apache.axis2.transport.http.HTTPConstants.AUTHENTICATE, auth);
         option.setManageSession(true);

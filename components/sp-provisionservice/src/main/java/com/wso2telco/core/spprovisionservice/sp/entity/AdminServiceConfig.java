@@ -17,6 +17,12 @@ package com.wso2telco.core.spprovisionservice.sp.entity;
 
 public class AdminServiceConfig {
 
+    private String adminServiceUrl;
+    private String ApplicationManagementHostUrl;
+    private String stubAccessUserName;
+    private String stubAccessPassword;
+    private int maximumTotalHttpConnections;
+    private int maximumHttpConnectionsPerHost;
     private String userName = null;
     private String password = null;
 
@@ -35,4 +41,53 @@ public class AdminServiceConfig {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getAdminServiceUrl() {
+        return adminServiceUrl;
+    }
+
+    public void setAdminServiceUrl(String adminServiceUrl) {
+        this.adminServiceUrl = adminServiceUrl;
+    }
+
+    public String getApplicationManagementHostUrl() {
+        return ApplicationManagementHostUrl;
+    }
+
+    public void setApplicationManagementHostUrl(String applicationManagementHostUrl) {
+        ApplicationManagementHostUrl = applicationManagementHostUrl;
+    }
+
+    public String getStubAccessUserName() {
+        return stubAccessUserName;
+    }
+
+    public void setStubAccessUserName(String stubAccessUserName) {
+        this.stubAccessUserName = stubAccessUserName;
+    }
+
+    public String getStubAccessPassword() {
+        return stubAccessPassword;
+    }
+
+    public void setStubAccessPassword(String stubAccessPassword) {
+        this.stubAccessPassword = stubAccessPassword;
+    }
+
+    public int getMaximumTotalHttpConnections() {
+        return maximumTotalHttpConnections;
+    }
+
+    public void setMaximumTotalHttpConnections(int maximumTotalHttpConnections) {
+        this.maximumTotalHttpConnections = maximumTotalHttpConnections;
+    }
+
+    public int getMaximumHttpConnectionsPerHost() {
+        return maximumHttpConnectionsPerHost;
+    }
+
+    public void setMaximumHttpConnectionsPerHost(int maximumHttpConnectionsPerHost) {
+        this.maximumHttpConnectionsPerHost = maximumHttpConnectionsPerHost;
+    }
+
 }

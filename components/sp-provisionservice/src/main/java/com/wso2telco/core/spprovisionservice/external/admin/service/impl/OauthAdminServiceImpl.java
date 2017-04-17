@@ -19,6 +19,7 @@ import com.wso2telco.core.spprovisionservice.admin.service.client.OauthAdminClie
 import com.wso2telco.core.spprovisionservice.external.admin.service.OauthAdminService;
 import com.wso2telco.core.spprovisionservice.external.admin.service.dataTransform.TransformAdminServiceDto;
 import com.wso2telco.core.spprovisionservice.sp.entity.AdminServiceDto;
+import com.wso2telco.core.spprovisionservice.sp.entity.SpProvisionConfig;
 import com.wso2telco.core.spprovisionservice.sp.exception.SpProvisionServiceException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,10 +30,16 @@ public class OauthAdminServiceImpl implements OauthAdminService {
     private static Log log = LogFactory.getLog(OauthAdminServiceImpl.class);
     private OauthAdminClient oauthAdminServiceClient = null;
 
+    private SpProvisionConfig spProvisionConfig = null;
+
+    public OauthAdminServiceImpl(SpProvisionConfig spProvisionConfig) {
+        this.spProvisionConfig = spProvisionConfig;
+    }
+
     @Override
     public void removeOAuthApplicationData(String consumerKey) throws SpProvisionServiceException {
 
-        oauthAdminServiceClient = new OauthAdminClient();
+        oauthAdminServiceClient = new OauthAdminClient(this.spProvisionConfig.getAdminServiceConfig());
         try {
             oauthAdminServiceClient.removeOauthApplicationData(consumerKey);
         } catch (SpProvisionServiceException e) {
@@ -46,7 +53,7 @@ public class OauthAdminServiceImpl implements OauthAdminService {
             throws SpProvisionServiceException {
         boolean isRebuiltSuccess = false;
         if (adminServiceDto != null) {
-            oauthAdminServiceClient = new OauthAdminClient();
+            oauthAdminServiceClient = new OauthAdminClient(this.spProvisionConfig.getAdminServiceConfig());
             try {
                 TransformAdminServiceDto transformAdminServiceDto = new TransformAdminServiceDto();
                 AdminServiceDto adminSerDto = transformAdminServiceDto.transformToOAuthConsumerAppDto(adminServiceDto,
@@ -69,7 +76,7 @@ public class OauthAdminServiceImpl implements OauthAdminService {
             throws SpProvisionServiceException {
 
         OAuthConsumerAppDTO oAuthConsumerAppDTO = null;
-        oauthAdminServiceClient = new OauthAdminClient();
+        oauthAdminServiceClient = new OauthAdminClient(this.spProvisionConfig.getAdminServiceConfig());
         try {
             if (adminServiceDto != null) {
                 oAuthConsumerAppDTO = oauthAdminServiceClient
@@ -107,7 +114,7 @@ public class OauthAdminServiceImpl implements OauthAdminService {
         boolean status;
 
         if (adminServiceDto != null) {
-            oauthAdminServiceClient = new OauthAdminClient();
+            oauthAdminServiceClient = new OauthAdminClient(this.spProvisionConfig.getAdminServiceConfig());
             try {
                 oauthAdminServiceClient.registerOauthApplicationData(adminServiceDto);
                 status = success;
@@ -126,7 +133,7 @@ public class OauthAdminServiceImpl implements OauthAdminService {
     public AdminServiceDto getOauthServiceProviderData(String consumerKey) throws SpProvisionServiceException {
 
         OAuthConsumerAppDTO oAuthConsumerAppDTO;
-        oauthAdminServiceClient = new OauthAdminClient();
+        oauthAdminServiceClient = new OauthAdminClient(this.spProvisionConfig.getAdminServiceConfig());
         AdminServiceDto adminServiceDto;
         TransformAdminServiceDto transformAdminServiceDto = new TransformAdminServiceDto();
 

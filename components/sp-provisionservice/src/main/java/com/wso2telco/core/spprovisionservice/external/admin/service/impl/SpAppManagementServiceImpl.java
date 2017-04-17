@@ -19,6 +19,7 @@ import com.wso2telco.core.spprovisionservice.admin.service.client.ApplicationMan
 import com.wso2telco.core.spprovisionservice.external.admin.service.SpAppManagementService;
 import com.wso2telco.core.spprovisionservice.external.admin.service.dataTransform.TransformServiceProviderDto;
 import com.wso2telco.core.spprovisionservice.sp.entity.ServiceProviderDto;
+import com.wso2telco.core.spprovisionservice.sp.entity.SpProvisionConfig;
 import com.wso2telco.core.spprovisionservice.sp.exception.SpProvisionServiceException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,11 +27,13 @@ import org.wso2.carbon.identity.application.common.model.xsd.ServiceProvider;
 
 public class SpAppManagementServiceImpl implements SpAppManagementService {
 
-    ApplicationManagementClient applicationManagementServiceClient = null;
+    private ApplicationManagementClient applicationManagementServiceClient = null;
     private static Log log = LogFactory.getLog(SpAppManagementServiceImpl.class);
+    private SpProvisionConfig spProvisionConfig = null;
 
-    public SpAppManagementServiceImpl() {
-        applicationManagementServiceClient = new ApplicationManagementClient();
+    public SpAppManagementServiceImpl(SpProvisionConfig spProvisionConfig) {
+        this.spProvisionConfig = spProvisionConfig;
+        applicationManagementServiceClient = new ApplicationManagementClient(this.spProvisionConfig);
     }
 
     @Override
@@ -63,8 +66,8 @@ public class SpAppManagementServiceImpl implements SpAppManagementService {
     public void updateSpApplication(ServiceProviderDto serviceProviderDto) throws SpProvisionServiceException {
 
         try {
-            ServiceProvider serviceProvider = applicationManagementServiceClient.getSpApplicationData
-                    (serviceProviderDto.getApplicationName());
+            ServiceProvider serviceProvider = applicationManagementServiceClient
+                    .getSpApplicationData(serviceProviderDto.getApplicationName());
             serviceProviderDto.setApplicationId(serviceProvider.getApplicationID());
             applicationManagementServiceClient.updateSpApplication(serviceProviderDto);
         } catch (SpProvisionServiceException e) {

@@ -15,12 +15,9 @@
  ******************************************************************************/
 package com.wso2telco.core.spprovisionservice.admin.service.client;
 
-import com.wso2telco.core.config.model.MobileConnectConfig;
-import com.wso2telco.core.config.service.ConfigurationService;
-import com.wso2telco.core.config.service.ConfigurationServiceImpl;
-import com.wso2telco.core.spprovisionservice.admin.config.AdministrationServiceConfig;
 import com.wso2telco.core.spprovisionservice.external.admin.service.dataTransform.TransformServiceProviderDto;
 import com.wso2telco.core.spprovisionservice.sp.entity.ServiceProviderDto;
+import com.wso2telco.core.spprovisionservice.sp.entity.SpProvisionConfig;
 import com.wso2telco.core.spprovisionservice.sp.exception.SpProvisionServiceException;
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.client.Options;
@@ -30,8 +27,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.identity.application.common.model.xsd.ApplicationBasicInfo;
 import org.wso2.carbon.identity.application.common.model.xsd.ServiceProvider;
-import org.wso2.carbon.identity.application.mgt.stub
-        .IdentityApplicationManagementServiceIdentityApplicationManagementException;
+import org.wso2.carbon.identity.application.mgt.stub.IdentityApplicationManagementServiceIdentityApplicationManagementException;
 import org.wso2.carbon.identity.application.mgt.stub.IdentityApplicationManagementServiceStub;
 
 import java.rmi.RemoteException;
@@ -42,20 +38,17 @@ public class ApplicationManagementClient {
     private ServiceClient client = null;
     private TransformServiceProviderDto transformServiceProviderDto = null;
     private static Log log = LogFactory.getLog(ApplicationManagementClient.class);
-    private MobileConnectConfig mobileConnectConfig;
-    private ConfigurationService configurationService = new ConfigurationServiceImpl();
+    private SpProvisionConfig spProvisionConfig = null;
 
-    public ApplicationManagementClient() {
-        mobileConnectConfig = configurationService.getDataHolder().getMobileConnectConfig();
+    public ApplicationManagementClient(SpProvisionConfig spProvisionConfig) {
+        this.spProvisionConfig = spProvisionConfig;
         createAndAuthenticateStub();
     }
 
     private void createAndAuthenticateStub() {
-        AdministrationServiceConfig config = new AdministrationServiceConfig();
-
         try {
             stub = new IdentityApplicationManagementServiceStub(null,
-                    config.getApplicationManagementHostUrl());
+                    this.spProvisionConfig.getAdminServiceConfig().getApplicationManagementHostUrl());
 
             client = stub._getServiceClient();
         } catch (AxisFault axisFault) {
@@ -70,7 +63,6 @@ public class ApplicationManagementClient {
         ApplicationBasicInfo[] applicationBasicInfo;
 
         try {
-
             applicationBasicInfo = getAllApplicationBasicInfo();
 
             for (ApplicationBasicInfo appInfo : applicationBasicInfo) {
@@ -105,7 +97,6 @@ public class ApplicationManagementClient {
 
     }
 
-
     public void createSpApplication(ServiceProviderDto serviceProviderDto) throws SpProvisionServiceException {
 
         authenticate(client);
@@ -135,9 +126,8 @@ public class ApplicationManagementClient {
         if (serviceProviderDto != null) {
             transformServiceProviderDto = new TransformServiceProviderDto();
 
-            ServiceProvider serviceProvider = transformServiceProviderDto
-                    .transformToServiceProviderToUpdateApplication(getSpApplicationData(serviceProviderDto
-                            .getApplicationName()), serviceProviderDto);
+            ServiceProvider serviceProvider = transformServiceProviderDto.transformToServiceProviderToUpdateApplication(
+                    getSpApplicationData(serviceProviderDto.getApplicationName()), serviceProviderDto);
             try {
                 stub.updateApplication(serviceProvider);
             } catch (RemoteException e) {
@@ -169,8 +159,8 @@ public class ApplicationManagementClient {
     public void authenticate(ServiceClient client) {
         Options option = client.getOptions();
         HttpTransportProperties.Authenticator auth = new HttpTransportProperties.Authenticator();
-        auth.setUsername(mobileConnectConfig.getSpProvisionConfig().getStubAccessUserName());
-        auth.setPassword(mobileConnectConfig.getSpProvisionConfig().getStubAccessPassword());
+        auth.setUsername(this.spProvisionConfig.getAdminServiceConfig().getStubAccessUserName());
+        auth.setPassword(this.spProvisionConfig.getAdminServiceConfig().getStubAccessPassword());
         auth.setPreemptiveAuthentication(true);
         option.setProperty(org.apache.axis2.transport.http.HTTPConstants.AUTHENTICATE, auth);
         option.setManageSession(true);
